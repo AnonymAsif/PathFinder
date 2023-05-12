@@ -7,8 +7,8 @@ import java.awt.Dimension;
 
 /**
  * PathFinder which solves a maze of PathBlocks
- * Uses Depth First Search
- *
+ * Uses Depth First Search 
+ * 
  * Animates a ranger finding a cabin using a swing timer
  * Keeps track of position and uses a stack for DFS
  *
@@ -20,21 +20,21 @@ public class PathFinder extends JPanel
     // Dimensions of the maze
     private static final int MAZE_HEIGHT = 12;
     private static final int MAZE_WIDTH = 12;
-
+    
     // Dimensions of the panel
     private static final int PANEL_HEIGHT = 600;
     private static final int PANEL_WIDTH = 600;
-
+    
     // Dimensions of each block
     private static final int BLOCK_HEIGHT = PANEL_HEIGHT / MAZE_HEIGHT;
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
-
+    
     // 2D array of PathBlock
     private final PathBlock[][] maze;
-
+    
     // Stack for Depth First Search
     private final Stack<int[]> traversalStack;
-
+    
     // Constructor
     public PathFinder() {
         // Creates new maze
@@ -47,13 +47,14 @@ public class PathFinder extends JPanel
             for (int j = 0; j < MAZE_WIDTH; j++)
                 maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
 
+        
         // Initializes stack of indices
         traversalStack = new Stack<>();
-
+        
         // sets preferred size
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
     }
-
+    
     // Override of paintComponent to draw
     public void paintComponent(Graphics graphics) {
         Graphics2D g = (Graphics2D)graphics;
@@ -76,5 +77,4 @@ public class PathFinder extends JPanel
             }
         }
     }
-
 }

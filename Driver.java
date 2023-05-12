@@ -16,9 +16,10 @@ public class Driver extends JFrame
         // Sets up frame for the game
         setTitle("Maze Pathfinder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        
         // Initializes Pathfinder panel
         pathfinder = new PathFinder();
+        
 
         // Adds JPanels to frame and packs it
         getContentPane().add(pathfinder);

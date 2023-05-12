@@ -2,7 +2,6 @@
 /**
  * Tree is a PathBlock that cannot be walked through
  *
- *
  * @author Asif Rahman
  * @version 09/05/2023
  */

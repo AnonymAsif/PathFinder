@@ -18,7 +18,7 @@ public class Trail extends PathBlock
         DISCOVERED,
         EXPLORED
     }
-    
+
     // The traversal state of this block
     private TraversalState traversalState;
 
@@ -35,7 +35,7 @@ public class Trail extends PathBlock
     public TraversalState getTraversalState() {
         return traversalState;
     }
-    
+
     // Setter for traversalState
     public void setTraversalState(TraversalState newState) {
         this.traversalState = newState;

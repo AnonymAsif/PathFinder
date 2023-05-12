@@ -14,13 +14,13 @@ public class PathBlock extends Rectangle
     private static Color backgroundColour = Color.GREEN;
     private static Color borderColour = Color.BLACK;
     private static Color highlightColour = Color.BLUE;
-    
+
     // Constructor
     public PathBlock(int x, int y, int width, int height) {
         // Calls Rectangle constructor
         super(x, y, width, height);
     }
-    
+
     // Static getter method returning the colours
     public static Color getBackgroundColour() {
         return backgroundColour;
@@ -33,7 +33,7 @@ public class PathBlock extends Rectangle
     public static Color getHighlightColour() {
         return highlightColour;
     }
-    
+
     // Static setter methods for changing the colours
     public static void setBackgroundColour(Color bgColour) {
         backgroundColour = bgColour;

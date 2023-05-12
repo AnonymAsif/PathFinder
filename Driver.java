@@ -11,7 +11,7 @@ public class Driver extends JFrame
 {
     // Pathfinder object to display (JPanel)
     private PathFinder pathfinder;
-    
+
     public Driver() {
         // Sets up frame for the game
         setTitle("Maze Pathfinder");
@@ -20,12 +20,13 @@ public class Driver extends JFrame
         // Initializes Pathfinder panel
         pathfinder = new PathFinder();
         
+
         // Adds JPanels to frame and packs it
         getContentPane().add(pathfinder);
         pack();
         setVisible(true);
     }
-    
+
     // Starts Driver
     public static void main(String[] args) {
         new Driver();

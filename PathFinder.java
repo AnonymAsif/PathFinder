@@ -39,13 +39,14 @@ public class PathFinder extends JPanel
     public PathFinder() {
         // Creates new maze
         maze = new PathBlock[MAZE_HEIGHT][MAZE_WIDTH];
-        
+
         // Initializes each block
         // Every Block is a Trail by default until set otherwise
         // Multiplies by dimensions for no spacing between blocks
         for (int i = 0; i < MAZE_HEIGHT; i++)
             for (int j = 0; j < MAZE_WIDTH; j++)
                 maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+
         
         // Initializes stack of indices
         traversalStack = new Stack<>();
@@ -61,14 +62,14 @@ public class PathFinder extends JPanel
         // Increases the thickness of the lines
         // By making a new stroke
         g.setStroke(new BasicStroke(3));
-        
+
         for (PathBlock[] blocks : maze) {
             for (PathBlock block : blocks) {
                 // Sets the colour to the background colour
                 // And draws the background
                 g.setColor(PathBlock.getBackgroundColour());
                 g.fillRect((int)block.getX(), (int)block.getY(), (int)block.getWidth(), (int)block.getHeight());
-                
+
                 // Sets the colour to the border colour
                 // And draws the border
                 g.setColor(PathBlock.getBorderColour());
@@ -76,5 +77,4 @@ public class PathFinder extends JPanel
             }
         }
     }
-    
 }

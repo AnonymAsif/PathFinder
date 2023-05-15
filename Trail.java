@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 
 /**
  * Trail is a PathBlock
@@ -29,6 +30,12 @@ public class Trail extends PathBlock
         
         // Every path is undiscovered by default
         traversalState = TraversalState.UNDISCOVERED;
+    }
+    
+    // Method to draw this Trail
+    public void draw(Graphics g) {
+        // Draws PathBlock first
+        super.draw(g);
     }
     
     // Getter for traversalState

@@ -63,18 +63,13 @@ public class PathFinder extends JPanel
         // By making a new stroke
         g.setStroke(new BasicStroke(3));
 
+        // Draws every block
         for (PathBlock[] blocks : maze) {
             for (PathBlock block : blocks) {
-                // Sets the colour to the background colour
-                // And draws the background
-                g.setColor(PathBlock.getBackgroundColour());
-                g.fillRect((int)block.getX(), (int)block.getY(), (int)block.getWidth(), (int)block.getHeight());
-
-                // Sets the colour to the border colour
-                // And draws the border
-                g.setColor(PathBlock.getBorderColour());
-                g.drawRect((int)block.getX(), (int)block.getY(), (int)block.getWidth(), (int)block.getHeight());
+                // Draws the block and passes in the graphics context
+                block.draw(g);
             }
         }
+
     }
 }

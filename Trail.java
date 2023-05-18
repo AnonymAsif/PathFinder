@@ -16,20 +16,10 @@ public class Trail extends PathBlock
     // Explored means all possible paths 
     // From here have also been explored
     public enum TraversalState {
-        UNDISCOVERED(null),
-        DISCOVERED(null),
-        EXPLORED(null),
-        CABIN(null);
-        
-        private ImageIcon icon;
-        
-        TraversalState(ImageIcon icon) {
-           this.icon = icon; 
-        }
-        
-        public ImageIcon getIcon() {
-            return icon;
-        }
+        UNDISCOVERED,
+        DISCOVERED,
+        EXPLORED,
+        CABIN;
     }
 
     // The traversal state of this block

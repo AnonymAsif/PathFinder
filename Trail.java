@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import javax.swing.ImageIcon;
 
 /**
  * Trail is a PathBlock
@@ -15,9 +16,20 @@ public class Trail extends PathBlock
     // Explored means all possible paths 
     // From here have also been explored
     public enum TraversalState {
-        UNDISCOVERED,
-        DISCOVERED,
-        EXPLORED
+        UNDISCOVERED(null),
+        DISCOVERED(null),
+        EXPLORED(null),
+        CABIN(null);
+        
+        private ImageIcon icon;
+        
+        TraversalState(ImageIcon icon) {
+           this.icon = icon; 
+        }
+        
+        public ImageIcon getIcon() {
+            return icon;
+        }
     }
 
     // The traversal state of this block

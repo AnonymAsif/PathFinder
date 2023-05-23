@@ -1,4 +1,4 @@
-import java.awt.Graphics;
+import java.awt.*;
 import javax.swing.ImageIcon;
 
 /**
@@ -16,10 +16,51 @@ public class Trail extends PathBlock
     // Explored means all possible paths 
     // From here have also been explored
     public enum TraversalState {
-        UNDISCOVERED,
-        DISCOVERED,
-        EXPLORED,
-        CABIN;
+        UNDISCOVERED("States/undiscovered.png", new Color(0, 0, 0, 0)),
+        DISCOVERED_N("States/discoveredNorth.png", Color.BLUE),
+        DISCOVERED_E("States/discoveredEast.png", Color.GREEN),
+        DISCOVERED_S("States/discoveredSouth.png", Color.ORANGE),
+        DISCOVERED_W("States/discoveredWest.png", Color.YELLOW),
+        EXPLORED("States/explored.png", Color.RED),
+        CABIN("States/cabin.png", Color.BLACK);
+
+        // Saves if the icon was properly loaded with a valid file path
+        private final boolean validImage;
+
+        // Icon pertaining to the State
+        private ImageIcon icon;
+
+        // Default colour to use if the icon was not loaded
+        private final Color defaultColour;
+
+        TraversalState(String filepath, Color defaultColour) {
+            // Saves default colour in case of invalid icon
+            this.defaultColour = defaultColour;
+
+            // Gets the URL of the file path to be validated
+            java.net.URL imageURL = getClass().getResource(filepath);
+
+            // If the URL is valid, create an ImageIcon
+            if (imageURL != null) {
+                validImage = true;
+                icon = new ImageIcon(filepath);
+            }
+            // If the URL is invalid
+            else validImage = false;
+        }
+
+        // Getter methods
+        public boolean hasImage() {
+            return validImage;
+        }
+
+        public ImageIcon getIcon() {
+            return icon;
+        }
+
+        public Color getDefaultColour() {
+            return defaultColour;
+        }
     }
 
     // The traversal state of this block

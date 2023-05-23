@@ -31,7 +31,7 @@ public class PathFinder extends JPanel
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
     
     // ImageIcons for the Traversal States
-    private static final ImageIcon CABIN_ICON = new ImageIcon("Cabin/cabin.png");
+    private static final ImageIcon CABIN_ICON = new ImageIcon("States/cabin.png");
     private static final ImageIcon EXPLORED = new ImageIcon("States/explored.png");
     
     

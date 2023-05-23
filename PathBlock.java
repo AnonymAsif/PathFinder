@@ -10,13 +10,8 @@ import javax.swing.ImageIcon;
  * @author Asif Rahman
  * @version 08/05/2023
  */
-public abstract class PathBlock extends Rectangle
+public class PathBlock extends Rectangle
 {
-    // Enum of Directions stored in PathBlock
-    public enum Directions {
-        NORTH, EAST, SOUTH, WEST
-    }
-    
     // Colours for drawing Paths
     private static Color backgroundColour = Color.GREEN;
     private static Color borderColour = Color.BLACK;
@@ -30,9 +25,6 @@ public abstract class PathBlock extends Rectangle
         // Calls Rectangle constructor
         super(x, y, width, height);
     }
-    
-    // Abstract method that returns the current Direction of this block
-    public abstract PathBlock.Directions getCurrentDirection();
     
     // Method to draw this PathBlock
     public void draw(Graphics g) {

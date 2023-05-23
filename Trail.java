@@ -60,12 +60,6 @@ public class Trail extends PathBlock
         updateIcon(traversalState.getFilePath(), traversalState.getDefaultColour());
     }
     
-    // Method to draw this Trail
-    public void draw(Graphics g) {
-        // Draws PathBlock first
-        super.draw(g);
-    }
-    
     // Getter for traversalState
     public TraversalState getTraversalState() {
         return traversalState;

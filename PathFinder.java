@@ -1,4 +1,4 @@
-import javax.swing.JPanel;
+    import javax.swing.JPanel;
 import java.util.Stack;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -44,8 +44,11 @@ public class PathFinder extends JPanel
         // Every Block is a Trail by default until set otherwise
         // Multiplies by dimensions for no spacing between blocks
         for (int i = 0; i < MAZE_HEIGHT; i++)
-            for (int j = 0; j < MAZE_WIDTH; j++)
-                maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+            for (int j = 0; j < MAZE_WIDTH; j++) {
+                if (i == 5) 
+                    maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                else maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+            }
 
         
         // Initializes stack of indices
@@ -67,7 +70,7 @@ public class PathFinder extends JPanel
         for (PathBlock[] blocks : maze) {
             for (PathBlock block : blocks) {
                 // Draws the block and passes in the graphics context
-                block.draw(g);
+                block.draw(this, g);
             }
         }
 

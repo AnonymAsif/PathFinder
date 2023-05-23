@@ -23,12 +23,6 @@ public class Tree extends PathBlock
         // Updates the icon of this Tree to the tree image and colour
         updateIcon(imagePath, treeColour);
     }
-    
-    // Method to draw this Tree
-    public void draw(Graphics g) {
-        // Draws PathBlock first
-        super.draw(g);
-    }
 
     // Returns ImageIcon
     public ImageIcon getIcon() {

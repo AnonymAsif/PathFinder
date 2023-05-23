@@ -1,6 +1,7 @@
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
+import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 
 /**
@@ -36,12 +37,22 @@ public abstract class PathBlock extends Rectangle
     }
     
     // Method to draw this PathBlock
-    public void draw(Graphics g) {
+    public void draw(JPanel panel, Graphics g) {
         // Sets the colour to the background colour
         // And draws the background
         g.setColor(backgroundColour);
         g.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
-
+        
+        // If the image is valid, then draw it on the square
+        if (validImage) {
+            icon.paintIcon(panel, g, (int)getX(), (int)getY());
+        }
+        // If it isn't then fill the background with the default colour
+        else {
+            g.setColor(defaultColour);
+            g.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+        }
+        
         // Sets the colour to the border colour
         // And draws the border
         g.setColor(borderColour);

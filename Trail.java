@@ -24,38 +24,21 @@ public class Trail extends PathBlock
         EXPLORED("States/explored.png", Color.RED),
         CABIN("States/cabin.png", Color.BLACK);
 
-        // Saves if the icon was properly loaded with a valid file path
-        private final boolean validImage;
-
-        // Icon pertaining to the State
-        private ImageIcon icon;
+        // File path of the image
+        private final String filepath;
 
         // Default colour to use if the icon was not loaded
         private final Color defaultColour;
 
+        // Constructor that saves instance fields
         TraversalState(String filepath, Color defaultColour) {
-            // Saves default colour in case of invalid icon
+            this.filepath = filepath;
             this.defaultColour = defaultColour;
-
-            // Gets the URL of the file path to be validated
-            java.net.URL imageURL = getClass().getResource(filepath);
-
-            // If the URL is valid, create an ImageIcon
-            if (imageURL != null) {
-                validImage = true;
-                icon = new ImageIcon(filepath);
-            }
-            // If the URL is invalid
-            else validImage = false;
         }
 
         // Getter methods
-        public boolean hasImage() {
-            return validImage;
-        }
-
-        public ImageIcon getIcon() {
-            return icon;
+        public String getFilePath() {
+            return filepath;
         }
 
         public Color getDefaultColour() {
@@ -73,6 +56,9 @@ public class Trail extends PathBlock
         
         // Every path is undiscovered by default
         traversalState = TraversalState.UNDISCOVERED;
+
+        // Updates the current Icon to the image given by traversalState
+        updateIcon(traversalState.getFilePath(), traversalState.getDefaultColour());
     }
     
     // Method to draw this Trail

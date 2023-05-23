@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
-import javax.swing.ImageIcon;
 
 /**
  * PathFinder which solves a maze of PathBlocks
@@ -29,11 +28,6 @@ public class PathFinder extends JPanel
     // Dimensions of each block
     private static final int BLOCK_HEIGHT = PANEL_HEIGHT / MAZE_HEIGHT;
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
-    
-    // ImageIcons for the Traversal States
-    private static final ImageIcon CABIN_ICON = new ImageIcon("States/cabin.png");
-    private static final ImageIcon EXPLORED = new ImageIcon("States/explored.png");
-    
     
     // 2D array of PathBlock
     private final PathBlock[][] maze;

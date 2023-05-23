@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public class Driver extends JFrame
 {
     // Pathfinder object to display (JPanel)
-    private PathFinder pathfinder;
+    private final PathFinder pathfinder;
 
     public Driver() {
         // Sets up frame for the game

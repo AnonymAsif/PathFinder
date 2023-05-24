@@ -45,10 +45,23 @@ public class PathFinder extends JPanel
         // Multiplies by dimensions for no spacing between blocks
         for (int i = 0; i < MAZE_HEIGHT; i++)
             for (int j = 0; j < MAZE_WIDTH; j++) {
-                if (i == 5) 
+                if (i == 9)
                     maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
                 else maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
             }
+
+        for (int i = 6; i >= 1; i--) {
+            for (int j = 1; j < i; j++) {
+                for (PathBlock p : maze[j]) {
+                    if (p instanceof Trail t) {
+                        t.nextState();
+                    }
+                }
+
+            }
+        }
+
+
 
         
         // Initializes stack of indices

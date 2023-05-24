@@ -17,7 +17,7 @@ public class Trail extends PathBlock
     public enum TraversalState {
         UNDISCOVERED("States/undiscovered.png", new Color(0, 0, 0, 0)),
         DISCOVERED_N("States/discoveredNorth.png", Color.BLUE),
-        DISCOVERED_E("States/discoveredEast.png", Color.GREEN),
+        DISCOVERED_E("States/discoveredEast.png", Color.CYAN),
         DISCOVERED_S("States/discoveredSouth.png", Color.ORANGE),
         DISCOVERED_W("States/discoveredWest.png", Color.YELLOW),
         EXPLORED("States/explored.png", Color.RED),
@@ -68,5 +68,26 @@ public class Trail extends PathBlock
     // Setter for traversalState
     public void setTraversalState(TraversalState newState) {
         this.traversalState = newState;
+    }
+
+    // Updates traversalState to the next state
+    // Then returns the new traversalState
+    public TraversalState nextState() {
+        // This method should never be called on a fully explored Trail
+        if (traversalState == TraversalState.EXPLORED) {
+            throw new IllegalStateException("Cannot get the next state of an explored Trail.");
+        }
+
+        // Ordinal of the new state will be one higher than the old one
+        int newIndex = traversalState.ordinal() + 1;
+
+        // Updates traversalState to the state at the new ordinal
+        traversalState = TraversalState.values()[newIndex];
+
+        // Updates Icon and default colour to the icon of the new state
+        updateIcon(traversalState.getFilePath(), traversalState.getDefaultColour());
+
+        // Returns traversalState after updating for cleaner code
+        return traversalState;
     }
 }

@@ -1,4 +1,4 @@
-    import javax.swing.JPanel;
+import javax.swing.JPanel;
 import java.util.Stack;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +17,22 @@ import java.awt.Dimension;
  */
 public class PathFinder extends JPanel
 {
+    // Enum of directions for pathfinding movement
+    public enum Directions {
+        NORTH(-1, 0), // moves one up
+        EAST(0, 1), // moves one right
+        SOUTH(1, 0), // moves one down
+        WEST(0, -1); // moves one left  
+        
+        // int[2] storing the x and y vectors
+        int[] moves;
+        
+        // Saves x and y to moves
+        Directions(int x, int y) {
+            moves = new int[]{x, y};
+        }
+    }
+    
     // Dimensions of the maze
     private static final int MAZE_HEIGHT = 12;
     private static final int MAZE_WIDTH = 12;
@@ -39,31 +55,32 @@ public class PathFinder extends JPanel
     public PathFinder() {
         // Creates new maze
         maze = new PathBlock[MAZE_HEIGHT][MAZE_WIDTH];
+        
+        int[][] trees = {
+            {0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,1,1,1,1,1,1,1,0,1},
+            {1,0,0,0,0,1,0,0,0,1,0,1},
+            {0,0,1,1,0,1,0,1,0,0,0,1},
+            {0,1,1,0,0,1,0,1,0,1,1,1},
+            {0,1,0,0,0,1,0,0,0,0,0,1},
+            {0,1,1,0,1,1,1,1,1,0,0,1},
+            {0,0,1,0,1,0,1,0,1,0,1,1},
+            {1,1,1,0,1,0,0,0,1,0,1,1},
+            {0,0,0,0,1,0,1,0,0,0,1,1},
+            {1,0,1,0,1,1,1,1,0,1,1,1},
+            {1,1,1,0,0,0,0,1,0,0,0,0}
+        };
 
         // Initializes each block
         // Every Block is a Trail by default until set otherwise
         // Multiplies by dimensions for no spacing between blocks
         for (int i = 0; i < MAZE_HEIGHT; i++)
             for (int j = 0; j < MAZE_WIDTH; j++) {
-                if (i == 9)
+                if (trees[i][j] == 1)
                     maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
                 else maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
             }
 
-        for (int i = 6; i >= 1; i--) {
-            for (int j = 1; j < i; j++) {
-                for (PathBlock p : maze[j]) {
-                    if (p instanceof Trail t) {
-                        t.nextState();
-                    }
-                }
-
-            }
-        }
-
-
-
-        
         // Initializes stack of indices
         traversalStack = new Stack<>();
         

@@ -71,7 +71,7 @@ public abstract class PathBlock extends Rectangle
         // If the URL is valid, create an ImageIcon
         if (imageURL != null) {
             validImage = true;
-            icon = new ImageIcon(filepath);
+            icon = new ImageIcon(imageURL);
         }
         // If the URL is invalid
         else validImage = false;

@@ -1,9 +1,12 @@
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import java.util.Stack;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * PathFinder which solves a maze of PathBlocks
@@ -15,7 +18,7 @@ import java.awt.Dimension;
  * @author Asif Rahman
  * @version 09/05/2023
  */
-public class PathFinder extends JPanel
+public class PathFinder extends JPanel implements ActionListener
 {
     // Enum of directions for pathfinding movement
     public enum Directions {
@@ -45,6 +48,9 @@ public class PathFinder extends JPanel
     private static final int BLOCK_HEIGHT = PANEL_HEIGHT / MAZE_HEIGHT;
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
     
+    // Number of ms between timer events
+    private static final int UPDATE_TIME = 500;
+    
     // 2D array of PathBlock
     private final PathBlock[][] maze;
     
@@ -57,6 +63,9 @@ public class PathFinder extends JPanel
 
     // Direction that the Ranger is currently facing
     private Directions currentDirection;
+    
+    // Timer to animate the DFS with the ranger
+    private Timer timer;
     
     // Constructor
     public PathFinder() {
@@ -97,8 +106,43 @@ public class PathFinder extends JPanel
         // Facing south to start purely for design
         currentDirection = Directions.SOUTH;
         
+        // Creates timer object for animation
+        timer = new Timer(UPDATE_TIME, this);
+        
         // sets preferred size
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+    }
+    
+    // Action performed called by timer
+    public void actionPerformed(ActionEvent e) {
+        // Location of ranger
+        int[] rangerIndex = ranger.getCurrentIndex();
+        
+        // Variables with short names for convenience
+        int row = rangerIndex[0];
+        int col = rangerIndex[1];
+        
+        // If the ranger is not on a Trail, it is likely on a Tree
+        // Throw an Exception because that should never happen
+        if (!(maze[row][col] instanceof Trail currentBlock)) {
+            throw new IllegalStateException("Ranger must be on a Trail");
+        }
+        
+        // Handles the current state of the current block
+        switch (currentBlock.getTraversalState()) {
+            case UNDISCOVERED:
+            case DISCOVERED_N:
+            case DISCOVERED_E:
+            case DISCOVERED_S:
+            case DISCOVERED_W:
+            case EXPLORED:
+            default:
+        }
+        
+        // Moves currentBlock to the next state
+        // Now that the current state has been handled
+        currentBlock.nextState();
+        
     }
     
     // Override of paintComponent to draw

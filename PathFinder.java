@@ -49,7 +49,14 @@ public class PathFinder extends JPanel
     private final PathBlock[][] maze;
     
     // Stack for Depth First Search
+    // Contains int[2] of Directions
     private final Stack<int[]> traversalStack;
+
+    // Ranger that will explore the maze
+    private final Ranger ranger;
+
+    // Direction that the Ranger is currently facing
+    private Directions currentDirection;
     
     // Constructor
     public PathFinder() {
@@ -83,6 +90,12 @@ public class PathFinder extends JPanel
 
         // Initializes stack of indices
         traversalStack = new Stack<>();
+
+        // Creates a new Ranger at 0, 0
+        ranger = new Ranger(0, 0);
+
+        // Facing south to start purely for design
+        currentDirection = Directions.SOUTH;
         
         // sets preferred size
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -99,8 +112,26 @@ public class PathFinder extends JPanel
         // Draws every block
         for (PathBlock[] blocks : maze) {
             for (PathBlock block : blocks) {
-                // Draws the block and passes in the graphics context
+                // Passes in the graphics context and this for the icon
                 block.draw(this, g);
+            }
+        }
+
+        // Gets the coordinates in grid of ranger
+        int[] rangerIndex = ranger.getCurrentIndex();
+
+        // Calculates the x and y coordinates in pixels of ranger
+        int x = rangerIndex[0] * BLOCK_WIDTH;
+        int y = rangerIndex[1] * BLOCK_HEIGHT;
+
+        // Draws ranger
+        ranger.draw(this, g, currentDirection, x, y, BLOCK_WIDTH, BLOCK_HEIGHT);
+
+        // Draws the border around every block
+        for (PathBlock[] blocks : maze) {
+            for (PathBlock block : blocks) {
+                // Passes in the graphics context only
+                block.drawBorder(g);
             }
         }
 

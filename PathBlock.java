@@ -52,7 +52,10 @@ public abstract class PathBlock extends Rectangle
             g.setColor(defaultColour);
             g.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
         }
-        
+    }
+
+    // Draws the border around this PathBlock
+    public void drawBorder (Graphics g) {
         // Sets the colour to the border colour
         // And draws the border
         g.setColor(borderColour);

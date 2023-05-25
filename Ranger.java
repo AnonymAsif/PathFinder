@@ -12,9 +12,6 @@ import java.util.EnumMap;
  */
 public class Ranger
 {
-    // Array of size two storing the location
-    private int[] currentIndex;
-    
     // EnumMap storing the for each direction
     private EnumMap<PathFinder.Directions, ImageIcon> images;
     
@@ -24,17 +21,7 @@ public class Ranger
     // Color is used to draw ranger when images are not loaded correctly
     private Color defaultColour;
 
-    // Constructor defaults to (0, 0)
     public Ranger() {
-        this(0, 0);
-    }
-    
-    // Constructor that takes a starting index
-    public Ranger(int x, int y) {
-        
-        // Saves the starting index as the current index
-        currentIndex = new int[]{x, y};
-        
         // Initializes EnumMap
         images = new EnumMap<>(PathFinder.Directions.class);
 
@@ -83,10 +70,5 @@ public class Ranger
     // Returns the default colour of the Ranger
     public Color getDefaultColour() {
         return defaultColour;
-    }
-
-    // Returns the current index of the Ranger
-    public int[] getCurrentIndex() {
-        return currentIndex;
     }
 }

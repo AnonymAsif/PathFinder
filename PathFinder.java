@@ -101,7 +101,8 @@ public class PathFinder extends JPanel implements ActionListener
         traversalStack = new Stack<>();
 
         // Creates a new Ranger at 0, 0
-        ranger = new Ranger(0, 0);
+        ranger = new Ranger();
+        traversalStack.push(new int[] {0, 0});
 
         // Facing south to start purely for design
         currentDirection = Directions.SOUTH;
@@ -116,7 +117,7 @@ public class PathFinder extends JPanel implements ActionListener
     // Action performed called by timer
     public void actionPerformed(ActionEvent e) {
         // Location of ranger
-        int[] rangerIndex = ranger.getCurrentIndex();
+        int[] rangerIndex = traversalStack.peek();
         
         // Variables with short names for convenience
         int row = rangerIndex[0];
@@ -131,6 +132,7 @@ public class PathFinder extends JPanel implements ActionListener
         // Handles the current state of the current block
         switch (currentBlock.getTraversalState()) {
             case UNDISCOVERED:
+                // Tries to move north
             case DISCOVERED_N:
             case DISCOVERED_E:
             case DISCOVERED_S:
@@ -162,7 +164,7 @@ public class PathFinder extends JPanel implements ActionListener
         }
 
         // Gets the coordinates in grid of ranger
-        int[] rangerIndex = ranger.getCurrentIndex();
+        int[] rangerIndex = traversalStack.peek();
 
         // Calculates the x and y coordinates in pixels of ranger
         int x = rangerIndex[0] * BLOCK_WIDTH;

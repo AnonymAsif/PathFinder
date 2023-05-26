@@ -59,20 +59,16 @@ public class Trail extends PathBlock
         // Updates the current Icon to the image given by traversalState
         updateIcon(traversalState.getFilePath(), traversalState.getDefaultColour());
     }
-    
-    // Getter for traversalState
-    public TraversalState getTraversalState() {
-        return traversalState;
-    }
-
-    // Setter for traversalState
-    public void setTraversalState(TraversalState newState) {
-        this.traversalState = newState;
-    }
 
     // Updates traversalState to the next state
     // Then returns the new traversalState
     public TraversalState nextState() {
+        // A cabin will stay a cabin, it is a special state
+        // that is not used for searching
+        if (traversalState == TraversalState.CABIN) {
+            return traversalState;
+        }
+
         // This method should never be called on a fully explored Trail
         if (traversalState == TraversalState.EXPLORED) {
             throw new IllegalStateException("Cannot get the next state of an explored Trail.");
@@ -89,5 +85,22 @@ public class Trail extends PathBlock
 
         // Returns traversalState after updating for cleaner code
         return traversalState;
+    }
+
+    // Returns if the Trail has been discovered yet
+    public boolean isDiscovered() {
+        // If it isn't undiscovered or a cabin, it must have been discovered
+        return traversalState != TraversalState.UNDISCOVERED
+                && traversalState != TraversalState.CABIN;
+    }
+
+    // Getter for traversalState
+    public TraversalState getTraversalState() {
+        return traversalState;
+    }
+
+    // Setter for traversalState
+    public void setTraversalState(TraversalState newState) {
+        this.traversalState = newState;
     }
 }

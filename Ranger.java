@@ -13,7 +13,7 @@ import java.util.EnumMap;
 public class Ranger
 {
     // EnumMap storing the for each direction
-    private EnumMap<PathFinder.Directions, ImageIcon> images;
+    private final EnumMap<PathFinder.Directions, ImageIcon> images;
     
     // Boolean to check if all images have loaded correctly
     private boolean imagesLoaded;

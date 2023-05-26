@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.util.EnumMap;
 import java.util.Stack;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -59,7 +60,10 @@ public class PathFinder extends JPanel implements ActionListener
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
     
     // Number of ms between timer events
-    private static final int UPDATE_TIME = 200;
+    private static final int UPDATE_TIME = 500;
+
+    // Maps traversal states to the direction of movement
+    private static EnumMap<Trail.TraversalState, Directions> stateDirections = null;
     
     // 2D array of PathBlock
     private final PathBlock[][] maze;
@@ -72,13 +76,13 @@ public class PathFinder extends JPanel implements ActionListener
     private final Ranger ranger;
 
     // Starting location of the Ranger
-    private final Coordinate2D start;
+    private final Coordinate2D startIndex;
 
     // Direction that the Ranger is currently facing
     private Directions currentDirection;
     
     // Timer to animate the DFS with the ranger
-    private Timer timer;
+    private final Timer timer;
     
     // Constructor
     public PathFinder() {
@@ -115,18 +119,31 @@ public class PathFinder extends JPanel implements ActionListener
 
         // Creates a new Ranger at 0, 0
         ranger = new Ranger();
-        start = new Coordinate2D(0, 0);
-        traversalStack.push(start);
+        startIndex = new Coordinate2D(0, 0);
+        traversalStack.push(startIndex);
 
         // Facing south to start purely for design
         currentDirection = Directions.SOUTH;
+
+        // Initializes the EnumMap if it is null
+        if (stateDirections == null) {
+            stateDirections = new EnumMap<>(Trail.TraversalState.class);
+
+            // Adds 4 directions
+            stateDirections.put(Trail.TraversalState.DISCOVERED_N, Directions.NORTH);
+            stateDirections.put(Trail.TraversalState.DISCOVERED_E, Directions.EAST);
+            stateDirections.put(Trail.TraversalState.DISCOVERED_S, Directions.SOUTH);
+            stateDirections.put(Trail.TraversalState.DISCOVERED_W, Directions.WEST);
+        }
+
+        // sets preferred size
+        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         
         // Creates timer object for animation
         timer = new Timer(UPDATE_TIME, this);
         timer.start();
         
-        // sets preferred size
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+
     }
     
     // Action performed called by timer
@@ -157,13 +174,28 @@ public class PathFinder extends JPanel implements ActionListener
         // All previous states should have been handled already
         switch (currentBlock.nextState()) {
             // Attempts to add the block in that direction to the stack
-            case DISCOVERED_N -> addIfUndiscovered(col, row, Directions.NORTH);
-            case DISCOVERED_E -> addIfUndiscovered(col, row, Directions.EAST);
-            case DISCOVERED_S -> addIfUndiscovered(col, row, Directions.SOUTH);
-            case DISCOVERED_W -> addIfUndiscovered(col, row, Directions.WEST);
+            // Uses the state direction that corresponds with the current traversal state
+            case DISCOVERED_N, DISCOVERED_E, DISCOVERED_S, DISCOVERED_W ->
+                    addIfUndiscovered(row, col, stateDirections.get(currentBlock.getTraversalState()));
 
             // This path is fully explored, pop it from the stack
-            case EXPLORED -> traversalStack.pop();
+            // Updates the direction of the ranger
+            case EXPLORED -> {
+                traversalStack.pop();
+
+                // Face south if the stack is empty
+                if (traversalStack.isEmpty()) {
+                    currentDirection = Directions.SOUTH;
+                    return;
+                }
+
+                // Gets coordinates of previous Trail
+                row = traversalStack.peek().x();
+                col = traversalStack.peek().y();
+
+                // Updates the current direction based on the traversal state of the previous Trail
+                currentDirection = stateDirections.get(((Trail)maze[col][row]).getTraversalState());
+            }
 
             // Successfully found the cabin, stop the timer
             case CABIN -> timer.stop();
@@ -197,6 +229,10 @@ public class PathFinder extends JPanel implements ActionListener
 
         // Add the index to the stack since it is valid
         traversalStack.push(new Coordinate2D(newX, newY));
+
+        // Since the ranger is moving to this square,
+        // it should face the movement direction
+        currentDirection = movementDirection;
     }
     
     // Override of paintComponent to draw
@@ -231,8 +267,8 @@ public class PathFinder extends JPanel implements ActionListener
 
         // Otherwise draw the ranger at the start
         else {
-            x = start.x() * BLOCK_WIDTH;
-            y = start.y() * BLOCK_HEIGHT;
+            x = startIndex.x() * BLOCK_WIDTH;
+            y = startIndex.y() * BLOCK_HEIGHT;
         }
 
         // Draws ranger

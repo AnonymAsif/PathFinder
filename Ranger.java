@@ -19,7 +19,7 @@ public class Ranger
     private boolean imagesLoaded;
     
     // Color is used to draw ranger when images are not loaded correctly
-    private Color defaultColour;
+    private static final Color defaultColour = Color.ORANGE;
 
     public Ranger() {
         // Initializes EnumMap

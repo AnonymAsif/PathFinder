@@ -1,4 +1,4 @@
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -15,6 +15,9 @@ public class Driver extends JFrame implements PathFinderListener
 
     // Button panel with all relevant buttons (start, stop, skip)
     private final ButtonPanel buttonPanel;
+
+    // Menubar that contains maze and colour editor commands
+    private final JMenuBar menubar;
 
     public Driver() {
         // Sets up frame for the game
@@ -45,9 +48,14 @@ public class Driver extends JFrame implements PathFinderListener
         // The event is null as it was called from this class
         timerStopped(null);
 
-        // Adds JPanels to frame and packs it
+        // Initializes menubar and sets it up
+        menubar = new JMenuBar();
+        setupMenuBar();
+
+        // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        getContentPane().add(menubar, BorderLayout.NORTH);
         pack();
         setVisible(true);
     }
@@ -55,6 +63,24 @@ public class Driver extends JFrame implements PathFinderListener
     // Starts Driver
     public static void main(String[] args) {
         new Driver();
+    }
+
+    // Sets up the menubar by adding JMenus to it
+    // and by adding JMenuItems to each JMenu
+    private void setupMenuBar() {
+        // Creates an Edit menu
+        JMenu edit = new JMenu("Edit");
+
+        // Creates two menu items for maze and colour
+        JMenuItem editMaze = new JMenuItem("Maze");
+        JMenuItem editColour = new JMenuItem("Colour");
+
+        // Adds the menu items to the Edit menu
+        edit.add(editMaze);
+        edit.add(editColour);
+
+        // Adds Edit menu to menubar
+        menubar.add(edit);
     }
 
     // PathFinder ended, disable all buttons and let user know

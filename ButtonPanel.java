@@ -28,16 +28,22 @@ public class ButtonPanel extends JPanel {
     // Size of the north and south panels for spacing
     private final int MARGIN = 10;
 
+    // Saves the number of buttons in panel
+    private int buttonCount;
+
     public ButtonPanel(String[] buttonNames, ButtonAction[] actions, ButtonStates[][] states, int width, Color backgroundColour, ButtonUI ui) {
         // Sets panel size and background colour
         // Total height is equal to the sum of both margins and center height
         setPreferredSize(new Dimension(width, CENTER_HEIGHT + 2 * MARGIN));
         setBackground(backgroundColour);
         setLayout(new BorderLayout());
+
+        // Sets buttonCount to the number of button names
+        buttonCount = buttonNames.length;
         
         // If the number of button names, actions and states do not match
         // A valid number of buttons cannot be created
-        if (buttonNames.length != actions.length || states.length != actions.length) {
+        if (actions.length != buttonCount || states.length != buttonCount) {
             throw new IllegalArgumentException("Length of button names, actions and states do not match.");
         }
         
@@ -49,10 +55,10 @@ public class ButtonPanel extends JPanel {
         for (int i = 0; i < buttons.length; i++) {
             // Creates JButton with the name of the button
             buttons[i] = new JButton(buttonNames[i]);
-            
+
             // Sets the ButtonUI of the JButton
             buttons[i].setUI(ui);
-            
+
             // Adds the button action to the button
             // buttonAction and i must be final to be used in a lambda expression
             int finalI = i;
@@ -69,49 +75,11 @@ public class ButtonPanel extends JPanel {
             });
         }
 
-        // // Buttons for Start, Stop and Skip
-        // startButton = new JButton("Start");
-        // stopButton = new JButton("Stop");
-        // skipButton = new JButton("Skip");
-
-        // // Sets ui to ButtonUI passed in
-        // startButton.setUI(ui);
-        // stopButton.setUI(ui);
-        // skipButton.setUI(ui);
-
-        // // Disables stop by default since the timer hasn't started
-        // stopButton.setEnabled(false);
-
-        // /* Add action listeners to buttons
-         // * Start and stop start/stop the grid timer
-         // * And disable themselves
-         // * until the timer is start/stopped again */
-        // startButton.addActionListener(e -> {
-            // grid.start();
-
-            // // Enable other buttons
-            // startButton.setEnabled(false);
-            // stopButton.setEnabled(true);
-            // skipButton.setEnabled(false);
-        // });
-
-        // stopButton.addActionListener(e -> {
-            // grid.stop();
-
-            // // Enable other buttons
-            // startButton.setEnabled(true);
-            // stopButton.setEnabled(false);
-            // skipButton.setEnabled(true);
-        // });
-
-        // // Skip button skips one frame - doesn't disable anything
-        // skipButton.addActionListener(e -> grid.skip());
-
         // Creates new JPanel to add the buttons to
         JPanel buttonJPanel = new JPanel();
         buttonJPanel.setBackground(backgroundColour);
 
-        // Adds every buttons to buttonJPanel
+        // Adds every button to buttonJPanel
         for (JButton button : buttons) {
             buttonJPanel.add(button);
         }
@@ -132,5 +100,20 @@ public class ButtonPanel extends JPanel {
         // Adds north and south panels for spacing
         add(northPanel, BorderLayout.NORTH);
         add(southPanel, BorderLayout.SOUTH);
+    }
+
+    // Sets a new button configuration, without affected button presses
+    // This method only temporarily changes the configuration until a button is pressed
+    public void setButtonConfig(ButtonStates[] newStates) {
+        // Invalid number of new states
+        if (newStates.length != buttonCount) {
+            throw new IllegalArgumentException("Length of new states does not match button count.");
+        }
+
+        // For each button in the panel
+        // Set it enabled only if the corresponding new state is ENABLED
+        for (int i = 0; i < newStates.length; i++) {
+            buttons[i].setEnabled(newStates[i] == ButtonStates.ENABLED);
+        }
     }
 }

@@ -45,6 +45,10 @@ public class Driver extends JFrame
         // Also passes in the width of the panel, background colour and the ButtonUI
         buttonPanel = new ButtonPanel(buttonNames, buttonActions, buttonStates, pathfinder.getWidth(), Color.ORANGE, ui);
 
+        // Sets a default button configuration
+        // Timer is stopped by default
+        buttonPanel.setButtonConfig(buttonStates[1]);
+
         // Adds JPanels to frame and packs it
         getContentPane().add(pathfinder);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);

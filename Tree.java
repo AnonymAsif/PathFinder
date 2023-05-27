@@ -3,6 +3,7 @@ import java.awt.*;
 
 /**
  * Tree is a PathBlock that cannot be walked through
+ * It is drawn using a tree ImageIcon and has a gray default colour
  *
  * @author Asif Rahman
  * @version 09/05/2023

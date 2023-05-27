@@ -4,7 +4,7 @@ import java.awt.*;
  * Trail is a PathBlock
  * Represents a walkable path
  * Can be traversed for searching
- * Saves the states of neighbours during traversal
+ * Saves the TraversalState to keep track of where to go next
  *
  * @author Asif Rahman
  * @version 09/05/2023
@@ -100,7 +100,11 @@ public class Trail extends PathBlock
     }
 
     // Setter for traversalState
+    // Updates the icon accordingly
     public void setTraversalState(TraversalState newState) {
         this.traversalState = newState;
+
+        // Updates the current Icon to the image given by traversalState
+        updateIcon(traversalState.getFilePath(), traversalState.getDefaultColour());
     }
 }

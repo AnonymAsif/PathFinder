@@ -60,7 +60,7 @@ public class PathFinder extends JPanel implements ActionListener
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
     
     // Number of ms between timer events
-    private static final int UPDATE_TIME = 500;
+    private static final int UPDATE_TIME = 75;
 
     // Maps traversal states to the direction of movement
     private static EnumMap<Trail.TraversalState, Directions> stateDirections = null;
@@ -104,7 +104,7 @@ public class PathFinder extends JPanel implements ActionListener
             {1,1,1,0,1,0,0,0,1,0,1,1},
             {0,0,0,0,1,0,1,0,0,0,1,1},
             {1,0,1,0,1,1,1,1,0,1,1,1},
-            {1,1,1,0,0,0,0,1,0,0,0,0}
+            {1,1,1,0,0,0,2,1,0,0,0,0}
         };
 
         // Initializes each block
@@ -114,7 +114,12 @@ public class PathFinder extends JPanel implements ActionListener
             for (int j = 0; j < MAZE_WIDTH; j++) {
                 if (trees[i][j] == 1)
                     maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
-                else maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                else {
+                    maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+
+                    if (trees[i][j] == 2)
+                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
+                }
             }
 
         // Creates a new Ranger at 0, 0
@@ -200,8 +205,6 @@ public class PathFinder extends JPanel implements ActionListener
             // The next state of a block should never be UNDISCOVERED, since it's the first state
             case UNDISCOVERED -> throw new IllegalStateException("Next state of Block is UNDISCOVERED");
         }
-
-        System.out.println("Action Performed! ");
 
         // Repaints the panel
         repaint();

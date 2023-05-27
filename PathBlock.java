@@ -38,13 +38,15 @@ public abstract class PathBlock extends Rectangle
     
     // Method to draw this PathBlock
     public void draw(JPanel panel, Graphics g) {
-        // Sets the colour to the background colour
-        // And draws the background
-        g.setColor(backgroundColour);
-        g.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
-        
+
         // If the image is valid, then draw it on the square
         if (validImage) {
+            // Sets the colour to the background colour
+            // And draws the background
+            g.setColor(backgroundColour);
+            g.fillRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+
+            // Draws icon
             icon.paintIcon(panel, g, (int)getX(), (int)getY());
         }
         // If it isn't then fill the background with the default colour

@@ -1,3 +1,4 @@
+import javax.swing.*;
 
 /**
  * Functional interface for a buttons action

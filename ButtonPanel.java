@@ -29,9 +29,9 @@ public class ButtonPanel extends JPanel {
     private final int MARGIN = 10;
 
     // Saves the number of buttons in panel
-    private int buttonCount;
+    private final int buttonCount;
 
-    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, ButtonStates[][] states, int width, Color backgroundColour, ButtonUI ui) {
+    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, int width, Color backgroundColour, ButtonUI ui) {
         // Sets panel size and background colour
         // Total height is equal to the sum of both margins and center height
         setPreferredSize(new Dimension(width, CENTER_HEIGHT + 2 * MARGIN));
@@ -41,14 +41,14 @@ public class ButtonPanel extends JPanel {
         // Sets buttonCount to the number of button names
         buttonCount = buttonNames.length;
         
-        // If the number of button names, actions and states do not match
+        // If the number of button names and actions do not match
         // A valid number of buttons cannot be created
-        if (actions.length != buttonCount || states.length != buttonCount) {
-            throw new IllegalArgumentException("Length of button names, actions and states do not match.");
+        if (actions.length != buttonCount) {
+            throw new IllegalArgumentException("Length of button names and actions do not match.");
         }
         
         // Initializes buttons array
-        buttons = new JButton[buttonNames.length];
+        buttons = new JButton[buttonCount];
         
         // Create every button in the buttons array,
         // Then set its UI and ActionListener
@@ -60,19 +60,9 @@ public class ButtonPanel extends JPanel {
             buttons[i].setUI(ui);
 
             // Adds the button action to the button
-            // buttonAction and i must be final to be used in a lambda expression
-            int finalI = i;
+            // buttonAction must be final to be used in a lambda expression
             ButtonAction buttonAction = actions[i];
-            buttons[i].addActionListener(e -> {
-                // Does the button action
-                buttonAction.doAction();
-
-                // states[finalI] gives the button configuration applied by this button
-                // For every button in the button configuration, set it enabled if the given state is ENABLED
-                for (int j = 0; j < states[finalI].length; j++) {
-                    buttons[j].setEnabled(states[finalI][j] == ButtonStates.ENABLED);
-                }
-            });
+            buttons[i].addActionListener(e -> buttonAction.doAction());
         }
 
         // Creates new JPanel to add the buttons to
@@ -111,9 +101,24 @@ public class ButtonPanel extends JPanel {
         }
 
         // For each button in the panel
-        // Set it enabled only if the corresponding new state is ENABLED
         for (int i = 0; i < newStates.length; i++) {
+            // Don't do anything if the state is UNCHANGED
+            if (newStates[i] == ButtonStates.UNCHANGED) continue;
+
+            // Set it enabled only if the corresponding new state is ENABLED
             buttons[i].setEnabled(newStates[i] == ButtonStates.ENABLED);
+        }
+    }
+
+    // Overload of setButtonConfig that sets all button states to one state
+    public void setButtonConfig(ButtonStates newState) {
+        // Do nothing if the new state is UNCHANGED
+        if (newState == ButtonStates.UNCHANGED) return;
+
+        // For each button in the panel
+        // Set it enabled only if the new state is ENABLED
+        for (JButton button : buttons) {
+            button.setEnabled(newState == ButtonStates.ENABLED);
         }
     }
 }

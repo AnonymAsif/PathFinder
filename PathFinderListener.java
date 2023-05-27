@@ -44,4 +44,12 @@ public interface PathFinderListener extends EventListener {
      * @param e PathFinderEvent giving ranger details
      */
     void frameSkipped(PathFinderEvent e);
+
+    /** Indicates that the PathFinder has reset
+     * This means it is using the same maze and PathFinder object,
+     * but the ranger and all traversal states are reset.
+     *
+     * @param e PathFinderEvent giving ranger details
+     */
+    void reset(PathFinderEvent e);
 }

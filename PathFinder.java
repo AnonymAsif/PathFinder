@@ -292,6 +292,53 @@ public class PathFinder extends JPanel implements ActionListener
 
     }
 
+    public void resetPathFinder() {
+        // Clears the stack
+        traversalStack.clear();
+
+        // Adds the ranger's starting location to the stack
+        traversalStack.push(startIndex);
+
+        int[][] trees = {
+                {0,0,0,0,0,0,0,0,0,0,0,1},
+                {1,0,1,1,1,1,1,1,1,1,0,1},
+                {1,0,0,0,0,1,0,0,0,1,0,1},
+                {0,0,1,1,0,1,0,1,0,0,0,1},
+                {0,1,1,0,0,1,0,1,0,1,1,1},
+                {0,1,0,0,0,1,0,0,0,0,0,1},
+                {0,1,1,0,1,1,1,1,1,0,0,1},
+                {0,0,1,0,1,0,1,0,1,0,1,1},
+                {1,1,1,0,1,0,0,0,1,0,1,1},
+                {0,0,0,0,1,0,1,0,0,0,1,1},
+                {1,0,1,0,1,1,1,1,0,1,1,1},
+                {1,1,1,0,0,0,2,1,0,0,0,0}
+        };
+
+        // Initializes each block
+        // Every Block is a Trail by default until set otherwise
+        // Multiplies by dimensions for no spacing between blocks
+        for (int i = 0; i < MAZE_HEIGHT; i++)
+            for (int j = 0; j < MAZE_WIDTH; j++) {
+                if (trees[i][j] == 1)
+                    maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                else {
+                    maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+
+                    if (trees[i][j] == 2)
+                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
+                }
+            }
+
+        // Facing south to start purely for appearance
+        currentDirection = Directions.SOUTH;
+
+        // Redraws the reset PathFinder panel
+        repaint();
+
+        // Fires a reset event
+        fireReset();
+    }
+
     // Starts timer and fires timerStarted
     public void start() {
         timer.start();
@@ -394,6 +441,17 @@ public class PathFinder extends JPanel implements ActionListener
         // Fires the event for every added listener
         for (PathFinderListener listener : listeners) {
             listener.frameSkipped(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
+    }
+
+    // Fires a reset event
+    private void fireReset() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.reset(new PathFinderEvent(this, rangerLocation, currentDirection));
         }
     }
 }

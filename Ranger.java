@@ -5,7 +5,7 @@ import java.util.EnumMap;
 /**
  * Ranger for Pathfinding maze solver
  * Ranger has four images for each direction
- * Keeps track of current location
+ * This class is used mainly for drawing purposes
  *
  * @author Asif Rahman
  * @version 24/05/2023

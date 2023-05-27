@@ -26,10 +26,10 @@ public class PathFinder extends JPanel implements ActionListener
 
     // Enum of directions for pathfinding movement
     public enum Directions {
-        NORTH(-1, 0), // moves one up
-        EAST(0, 1), // moves one right
-        SOUTH(1, 0), // moves one down
-        WEST(0, -1); // moves one left  
+        NORTH(0, -1), // moves one up
+        EAST(1, 0), // moves one right
+        SOUTH(0, 1), // moves one down
+        WEST(-1, 0); // moves one left
         
         // 2d coordinates storing the x and y vectors
         private final Coordinate2D move;

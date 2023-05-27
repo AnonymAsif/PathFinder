@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Stack;
 import java.awt.Graphics;
@@ -83,6 +84,9 @@ public class PathFinder extends JPanel implements ActionListener
     
     // Timer to animate the DFS with the ranger
     private final Timer timer;
+
+    // ArrayList of event listeners to fire events on
+    private final ArrayList<PathFinderListener> listeners;
     
     // Constructor
     public PathFinder() {
@@ -141,21 +145,23 @@ public class PathFinder extends JPanel implements ActionListener
             stateDirections.put(Trail.TraversalState.DISCOVERED_W, Directions.WEST);
         }
 
-        // sets preferred size
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        
         // Creates timer object for animation
         timer = new Timer(UPDATE_TIME, this);
+
+        // Initializes ArrayList of listeners
+        listeners = new ArrayList<>();
+
+        // sets preferred size
+        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
     }
     
     // Action performed called by timer
     public void actionPerformed(ActionEvent e) {
         // If the stack is empty, the maze cannot be solved
-        // Stop the timer and do something with the Ranger
+        // End the PathFinder, giving false as no path was found
         if (traversalStack.isEmpty()) {
-            timer.stop();
+            endPathFinder(false);
             return;
-            // DO SOMETHING HERE
         }
 
         // Location of ranger
@@ -199,8 +205,8 @@ public class PathFinder extends JPanel implements ActionListener
                 currentDirection = stateDirections.get(((Trail)maze[col][row]).getTraversalState());
             }
 
-            // Successfully found the cabin, stop the timer
-            case CABIN -> timer.stop();
+            // Successfully found the cabin, end the PathFinder
+            case CABIN -> endPathFinder(true);
 
             // The next state of a block should never be UNDISCOVERED, since it's the first state
             case UNDISCOVERED -> throw new IllegalStateException("Next state of Block is UNDISCOVERED");
@@ -286,19 +292,108 @@ public class PathFinder extends JPanel implements ActionListener
 
     }
 
-    // Starts timer
+    // Starts timer and fires timerStarted
     public void start() {
         timer.start();
+        fireTimerStarted();
     }
 
-    // Stops timer
+    // Stops timer and fires timerStopped
     public void stop() {
         timer.stop();
+        fireTimerStopped();
     }
 
-    // Skips one animation frame
+    // Skips one animation frame and fires frameSkipped
     // Event can be null as it is unused
     public void skip() {
         actionPerformed(null);
+        fireFrameSkipped();
+    }
+
+    // Adds a PathFinderListener to fire events to
+    public void addPathFinderListener(PathFinderListener listener) {
+        // The listener cannot be null
+        if (listener == null) {
+            throw new IllegalArgumentException("Event listener cannot be null.");
+        }
+
+        // Adds the listener
+        listeners.add(listener);
+    }
+
+    // Attempts to remove a PathFinderListener to fire events to
+    // Does nothing if the listener is not present
+    public void removePathFinderListener(PathFinderListener listener) {
+        listeners.remove(listener);
+    }
+
+    // Ends the PathFinder animation,
+    // The maze was either fully explored or solved
+    private void endPathFinder(boolean pathFound) {
+        // Stops the timer
+        timer.stop();
+
+        // If a path was found, fire the pathFound event
+        // Otherwise fire the noPathFound event
+        if (pathFound) {
+            firePathFound();
+        }
+        else fireNoPathFound();
+    }
+
+    // Fires a pathFound event as the maze was solved
+    private void firePathFound() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.pathFound(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
+    }
+
+    // Fires a noPathFound event as the maze was fully explored
+    private void fireNoPathFound() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.noPathFound(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
+    }
+
+    // Fires a timerStarted event
+    private void fireTimerStarted() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.timerStarted(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
+    }
+
+    // Fires a timerStopped event
+    private void fireTimerStopped() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.timerStopped(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
+    }
+
+    // Fires a frameSkipped event
+    private void fireFrameSkipped() {
+        // If the stack is empty the ranger is at the start
+        Coordinate2D rangerLocation = traversalStack.isEmpty() ? startIndex : traversalStack.peek();
+
+        // Fires the event for every added listener
+        for (PathFinderListener listener : listeners) {
+            listener.frameSkipped(new PathFinderEvent(this, rangerLocation, currentDirection));
+        }
     }
 }

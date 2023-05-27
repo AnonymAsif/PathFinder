@@ -64,7 +64,7 @@ public class ButtonPanel extends JPanel {
                 // states[finalI] gives the button configuration applied by this button
                 // For every button in the button configuration, set it enabled if the given state is ENABLED
                 for (int j = 0; j < states[finalI].length; j++) {
-                    buttons[finalI].setEnabled(states[finalI][j] == ButtonStates.ENABLED);
+                    buttons[j].setEnabled(states[finalI][j] == ButtonStates.ENABLED);
                 }
             });
         }

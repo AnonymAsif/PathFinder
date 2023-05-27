@@ -141,9 +141,6 @@ public class PathFinder extends JPanel implements ActionListener
         
         // Creates timer object for animation
         timer = new Timer(UPDATE_TIME, this);
-        timer.start();
-        
-
     }
     
     // Action performed called by timer
@@ -204,6 +201,8 @@ public class PathFinder extends JPanel implements ActionListener
             case UNDISCOVERED -> throw new IllegalStateException("Next state of Block is UNDISCOVERED");
         }
 
+        System.out.println("Action Performed! ");
+
         // Repaints the panel
         repaint();
     }
@@ -211,6 +210,10 @@ public class PathFinder extends JPanel implements ActionListener
     // Tries to move the ranger in the given direction
     // Takes the current location of the ranger and direction af movement
     public void addIfUndiscovered(int xLoc, int yLoc, Directions movementDirection) {
+        // Since the ranger is trying to move to this square,
+        // it should face the movement direction
+        currentDirection = movementDirection;
+
         // Calculates the new movement direction
         int newX = xLoc + movementDirection.getMove().x();
         int newY = yLoc + movementDirection.getMove().y();
@@ -229,10 +232,6 @@ public class PathFinder extends JPanel implements ActionListener
 
         // Add the index to the stack since it is valid
         traversalStack.push(new Coordinate2D(newX, newY));
-
-        // Since the ranger is moving to this square,
-        // it should face the movement direction
-        currentDirection = movementDirection;
     }
     
     // Override of paintComponent to draw
@@ -282,5 +281,21 @@ public class PathFinder extends JPanel implements ActionListener
             }
         }
 
+    }
+
+    // Starts timer
+    public void start() {
+        timer.start();
+    }
+
+    // Stops timer
+    public void stop() {
+        timer.stop();
+    }
+
+    // Skips one animation frame
+    // Event can be null as it is unused
+    public void skip() {
+        actionPerformed(null);
     }
 }

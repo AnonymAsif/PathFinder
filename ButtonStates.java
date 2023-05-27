@@ -6,5 +6,5 @@
  * @version 26/05/2023
  */
 public enum ButtonStates {
-    ENABLED, DISABLED
+    ENABLED, DISABLED, UNCHANGED
 }

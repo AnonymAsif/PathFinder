@@ -28,17 +28,17 @@ public class ButtonPanel extends JPanel {
     // Size of the north and south panels for spacing
     private final int MARGIN = 10;
 
-    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, int width, Color backgroundColour, ButtonUI ui) {
+    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, ButtonStates[][] states, int width, Color backgroundColour, ButtonUI ui) {
         // Sets panel size and background colour
         // Total height is equal to the sum of both margins and center height
         setPreferredSize(new Dimension(width, CENTER_HEIGHT + 2 * MARGIN));
         setBackground(backgroundColour);
         setLayout(new BorderLayout());
         
-        // If the number of button names and button actions do not match
+        // If the number of button names, actions and states do not match
         // A valid number of buttons cannot be created
-        if (buttonNames.length != actions.length) {
-            throw new IllegalArgumentException("Length of button names and button actions do not match.");
+        if (buttonNames.length != actions.length || states.length != actions.length) {
+            throw new IllegalArgumentException("Length of button names, actions and states do not match.");
         }
         
         // Initializes buttons array
@@ -54,9 +54,19 @@ public class ButtonPanel extends JPanel {
             buttons[i].setUI(ui);
             
             // Adds the button action to the button
-            // buttonAction must be final to be used in a lambda expression
-            final ButtonAction buttonAction = actions[i];
-            buttons[i].addActionListener(e -> buttonAction.action());
+            // buttonAction and i must be final to be used in a lambda expression
+            int finalI = i;
+            ButtonAction buttonAction = actions[i];
+            buttons[i].addActionListener(e -> {
+                // Does the button action
+                buttonAction.doAction();
+
+                // states[finalI] gives the button configuration applied by this button
+                // For every button in the button configuration, set it enabled if the given state is ENABLED
+                for (int j = 0; j < states[finalI].length; j++) {
+                    buttons[finalI].setEnabled(states[finalI][j] == ButtonStates.ENABLED);
+                }
+            });
         }
 
         // // Buttons for Start, Stop and Skip
@@ -101,7 +111,7 @@ public class ButtonPanel extends JPanel {
         JPanel buttonJPanel = new JPanel();
         buttonJPanel.setBackground(backgroundColour);
 
-        // Adds every buttons to buttonJpanel
+        // Adds every buttons to buttonJPanel
         for (JButton button : buttons) {
             buttonJPanel.add(button);
         }

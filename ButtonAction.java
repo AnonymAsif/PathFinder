@@ -11,5 +11,5 @@ public interface ButtonAction
     /**
      * Does the button action
      */
-    public void action();
+    public void doAction();
 }

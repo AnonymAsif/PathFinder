@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Driver class for a Pathfinding AI
@@ -71,16 +72,59 @@ public class Driver extends JFrame implements PathFinderListener
         // Creates an Edit menu
         JMenu edit = new JMenu("Edit");
 
-        // Creates two menu items for maze and colour
+        // Creates two menu items for maze and speed
         JMenuItem editMaze = new JMenuItem("Maze");
-        JMenuItem editColour = new JMenuItem("Colour");
+        JMenuItem editSpeed = new JMenuItem("Speed");
+
+        // Adds the actions to the buttons
+        editSpeed.addActionListener(this::setPathFinderSpeed);
 
         // Adds the menu items to the Edit menu
         edit.add(editMaze);
-        edit.add(editColour);
+        edit.add(editSpeed);
 
-        // Adds Edit menu to menubar
+        // Creates a File menu
+        JMenu file = new JMenu("File");
+
+        // Creates two menu items for saving and loading
+        JMenuItem saveFile = new JMenuItem("Save");
+        JMenuItem loadFile = new JMenuItem("Load");
+
+        // Adds the menu items to the File menu
+        file.add(saveFile);
+        file.add(loadFile);
+
+        // Adds Edit and File menus to menubar
         menubar.add(edit);
+        menubar.add(file);
+    }
+
+    // Takes an ActionEvent as this method should be called by a button
+    // Gets input from user and attempts to parse it to an int
+    // Does not throw any exceptions, only lets the user know if the operation failed
+    private void setPathFinderSpeed(ActionEvent event) {
+        // Gets a new timer delay from the user
+        String inputString = JOptionPane.showInputDialog(this, "Enter the new timer delay: ");
+
+        // If the user cancelled the operation
+        if (inputString == null) {
+            JOptionPane.showMessageDialog(this, "Delay editing cancelled.");
+            return;
+        }
+
+        // Attempts to parse it to an integer and set a new timer delay
+        // Lets the user know if successful
+        try {
+            int newTimerDelay = Integer.parseInt(inputString);
+            pathfinder.setUpdateTime(newTimerDelay);
+
+            JOptionPane.showMessageDialog(this, "Successfully updated timer delay.");
+        }
+
+        // If the input was invalid, let the user know the operation failed
+        catch (NumberFormatException exception) {
+            JOptionPane.showMessageDialog(this, "Invalid timer delay. Please enter an integer.");
+        }
     }
 
     // PathFinder ended, disable all buttons and let user know

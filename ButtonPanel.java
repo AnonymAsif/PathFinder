@@ -6,12 +6,12 @@ import java.awt.Color;
 import java.awt.BorderLayout;
 
 /** 
- * Button Panel class for Pathfinding maze solver
+ * Button Panel class for GUI windows
  * Contains buttons that call the provided methods
  * Uses the ButtonUI passed in constructor
  *
  * Centers button by using a grid layout and
- * creating new Jpanels for margins
+ * creating new JPanels for margins
  *
  * @author Asif Rahman
  * @version 26/05/2023

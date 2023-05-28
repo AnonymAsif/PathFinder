@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 /**
  * Functional interface for a buttons action
  * Can be passed in as an action listener for a button
@@ -12,5 +10,5 @@ public interface ButtonAction
     /**
      * Does the button action
      */
-    public void doAction();
+    void doAction();
 }

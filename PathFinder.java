@@ -61,7 +61,7 @@ public class PathFinder extends JPanel implements ActionListener
     private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
     
     // Number of ms between timer events
-    private static final int UPDATE_TIME = 75;
+    private static int updateTime = 75;
 
     // Maps traversal states to the direction of movement
     private static EnumMap<Trail.TraversalState, Directions> stateDirections = null;
@@ -146,7 +146,7 @@ public class PathFinder extends JPanel implements ActionListener
         }
 
         // Creates timer object for animation
-        timer = new Timer(UPDATE_TIME, this);
+        timer = new Timer(updateTime, this);
 
         // Initializes ArrayList of listeners
         listeners = new ArrayList<>();
@@ -218,7 +218,7 @@ public class PathFinder extends JPanel implements ActionListener
 
     // Tries to move the ranger in the given direction
     // Takes the current location of the ranger and direction af movement
-    public void addIfUndiscovered(int xLoc, int yLoc, Directions movementDirection) {
+    private void addIfUndiscovered(int xLoc, int yLoc, Directions movementDirection) {
         // Since the ranger is trying to move to this square,
         // it should face the movement direction
         currentDirection = movementDirection;
@@ -292,10 +292,17 @@ public class PathFinder extends JPanel implements ActionListener
 
     }
 
-    public void resetPathFinder() {
-        // Clears the stack
-        traversalStack.clear();
+    // Setter for the updateTime variable
+    // Updates the timer delay with new speed
+    public void setUpdateTime(int updateTime) {
+        // saves new update time and sets timer delay
+        PathFinder.updateTime = updateTime;
+        timer.setDelay(updateTime);
+    }
 
+    // Resets the PathFinder by resetting the maze, ranger and current direction and
+    // Fires a reset event
+    public void resetPathFinder() {
         // Adds the ranger's starting location to the stack
         traversalStack.push(startIndex);
 
@@ -311,7 +318,7 @@ public class PathFinder extends JPanel implements ActionListener
                 {1,1,1,0,1,0,0,0,1,0,1,1},
                 {0,0,0,0,1,0,1,0,0,0,1,1},
                 {1,0,1,0,1,1,1,1,0,1,1,1},
-                {1,1,1,0,0,0,2,1,0,0,0,0}
+                {1,1,1,0,0,0,0,1,0,0,0,0}
         };
 
         // Initializes each block
@@ -331,6 +338,9 @@ public class PathFinder extends JPanel implements ActionListener
 
         // Facing south to start purely for appearance
         currentDirection = Directions.SOUTH;
+
+        // Resets the state of the Ranger
+        ranger.resetSuccess();
 
         // Redraws the reset PathFinder panel
         repaint();
@@ -380,6 +390,15 @@ public class PathFinder extends JPanel implements ActionListener
     private void endPathFinder(boolean pathFound) {
         // Stops the timer
         timer.stop();
+
+        // Clears the stack
+        traversalStack.clear();
+
+        // Set the success state of the ranger based on if it found a path
+        ranger.setSuccess(pathFound);
+
+        // Repaints to show the rangers new image
+        repaint();
 
         // If a path was found, fire the pathFound event
         // Otherwise fire the noPathFound event

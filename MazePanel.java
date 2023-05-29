@@ -54,6 +54,29 @@ public abstract class MazePanel extends JPanel {
         maze = new PathBlock[mazeHeight][mazeWidth];
     }
 
+    // Calls the draw methods on every PathBlock
     @Override
-    abstract public void paintComponent(Graphics g);
+    public void paintComponent(Graphics graphics) {
+        Graphics2D g = (Graphics2D)graphics;
+
+        // Increases the thickness of the lines
+        // By making a new stroke
+        g.setStroke(new BasicStroke(3));
+
+        // Draws every block
+        for (PathBlock[] blocks : maze) {
+            for (PathBlock block : blocks) {
+                // Passes in the graphics context and this for the icon
+                block.draw(this, g);
+            }
+        }
+
+        // Draws the border around every block
+        for (PathBlock[] blocks : maze) {
+            for (PathBlock block : blocks) {
+                // Passes in the graphics context only
+                block.drawBorder(g);
+            }
+        }
+    }
 }

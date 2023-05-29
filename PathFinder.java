@@ -216,20 +216,9 @@ public class PathFinder extends MazePanel implements ActionListener
     }
     
     // Override of paintComponent to draw
+    // Draws the ranger as the PathBlocks are drawn in superclass
     public void paintComponent(Graphics graphics) {
-        Graphics2D g = (Graphics2D)graphics;
-
-        // Increases the thickness of the lines
-        // By making a new stroke
-        g.setStroke(new BasicStroke(3));
-
-        // Draws every block
-        for (PathBlock[] blocks : maze) {
-            for (PathBlock block : blocks) {
-                // Passes in the graphics context and this for the icon
-                block.draw(this, g);
-            }
-        }
+        super.paintComponent(graphics);
 
         // Coordinates to draw the Ranger
         int x;
@@ -252,16 +241,7 @@ public class PathFinder extends MazePanel implements ActionListener
         }
 
         // Draws ranger
-        ranger.draw(this, g, currentDirection, x, y, blockWidth, blockHeight);
-
-        // Draws the border around every block
-        for (PathBlock[] blocks : maze) {
-            for (PathBlock block : blocks) {
-                // Passes in the graphics context only
-                block.drawBorder(g);
-            }
-        }
-
+        ranger.draw(this, graphics, currentDirection, x, y, blockWidth, blockHeight);
     }
 
     // Setter for the updateTime variable

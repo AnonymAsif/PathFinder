@@ -1,0 +1,63 @@
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Maze editor class for a maze solver
+ * JFrame window created on top of main panel
+ *
+ * @author Asif Rahman
+ * @version 28/05/2023
+ */
+public class MazeEditor extends JDialog {
+    // Dimensions of the maze
+    private final int mazeHeight;
+    private final int mazeWidth;
+
+    // Dimensions of the panel
+    private final int panelHeight;
+    private final int panelWidth;
+
+    // Dimensions of each block
+    private final int blockHeight;
+    private final int blockWidth;
+
+    // JList of icons for the user to choose when editing
+    private final JList<Icon> iconList;
+
+    // Constructor
+    public MazeEditor(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
+        // Saves maze and panel dimensions
+        this.mazeHeight = mazeHeight;
+        this.mazeWidth = mazeWidth;
+        this.panelHeight = panelHeight;
+        this.panelWidth = panelWidth;
+
+        // Calculates dimensions of each block
+        blockHeight = panelHeight / mazeHeight;
+        blockWidth = panelWidth / mazeWidth;
+
+        // Sets up frame
+        setTitle("Maze Editor");
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setPreferredSize(new Dimension(200, 200));
+
+        // Sets editor as a modal window
+        setModalityType(ModalityType.APPLICATION_MODAL);
+
+        // Creates list of icons
+        ImageIcon[] editorIcons = new ImageIcon[] {
+          new ImageIcon("tree.png"), // Tree image
+          new ImageIcon("Ranger/failure.png"), // Ranger image
+          new ImageIcon("States/cabin.png") // Cabin image
+        };
+
+        // Creates JList of icons to put on the right
+        // Limits selections to one at a time
+        iconList = new JList<>(editorIcons);
+        iconList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Adds components and packs
+        getContentPane().add(new JScrollPane(iconList), BorderLayout.EAST);
+        pack();
+    }
+}

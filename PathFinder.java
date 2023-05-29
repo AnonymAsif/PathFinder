@@ -49,16 +49,16 @@ public class PathFinder extends JPanel implements ActionListener
 
     
     // Dimensions of the maze
-    private static final int MAZE_HEIGHT = 12;
-    private static final int MAZE_WIDTH = 12;
-    
+    private final int mazeHeight;
+    private final int mazeWidth;
+
     // Dimensions of the panel
-    private static final int PANEL_HEIGHT = 600;
-    private static final int PANEL_WIDTH = 600;
+    private final int panelHeight;
+    private final int panelWidth;
     
     // Dimensions of each block
-    private static final int BLOCK_HEIGHT = PANEL_HEIGHT / MAZE_HEIGHT;
-    private static final int BLOCK_WIDTH = PANEL_WIDTH / MAZE_WIDTH;
+    private final int blockHeight;
+    private final int blockWidth;
     
     // Number of ms between timer events
     private static int updateTime = 75;
@@ -89,9 +89,19 @@ public class PathFinder extends JPanel implements ActionListener
     private final ArrayList<PathFinderListener> listeners;
     
     // Constructor
-    public PathFinder() {
+    public PathFinder(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
+        // Saves maze and panel dimensions
+        this.mazeHeight = mazeHeight;
+        this.mazeWidth = mazeWidth;
+        this.panelHeight = panelHeight;
+        this.panelWidth = panelWidth;
+
+        // Calculates dimensions of each block
+        blockHeight = panelHeight / mazeHeight;
+        blockWidth = panelWidth / mazeWidth;
+
         // Creates new maze
-        maze = new PathBlock[MAZE_HEIGHT][MAZE_WIDTH];
+        maze = new PathBlock[mazeHeight][mazeWidth];
 
         // Initializes stack of indices
         traversalStack = new Stack<>();
@@ -114,12 +124,12 @@ public class PathFinder extends JPanel implements ActionListener
         // Initializes each block
         // Every Block is a Trail by default until set otherwise
         // Multiplies by dimensions for no spacing between blocks
-        for (int i = 0; i < MAZE_HEIGHT; i++)
-            for (int j = 0; j < MAZE_WIDTH; j++) {
+        for (int i = 0; i < mazeHeight; i++)
+            for (int j = 0; j < mazeWidth; j++) {
                 if (trees[i][j] == 1)
-                    maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
                 else {
-                    maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
 
                     if (trees[i][j] == 2)
                         ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
@@ -152,7 +162,7 @@ public class PathFinder extends JPanel implements ActionListener
         listeners = new ArrayList<>();
 
         // sets preferred size
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
     
     // Action performed called by timer
@@ -228,8 +238,8 @@ public class PathFinder extends JPanel implements ActionListener
         int newY = yLoc + movementDirection.getMove().y();
 
         // Makes sure that the new coordinate is valid
-        if (newX < 0 || newX >= MAZE_WIDTH) return;
-        if (newY < 0 || newY >= MAZE_HEIGHT) return;
+        if (newX < 0 || newX >= mazeWidth) return;
+        if (newY < 0 || newY >= mazeHeight) return;
 
         // If the block is not a Trail (it is a Tree),
         // Then the ranger cannot traverse it, return
@@ -269,18 +279,18 @@ public class PathFinder extends JPanel implements ActionListener
             Coordinate2D rangerIndex = traversalStack.peek();
 
             // Calculates the x and y coordinates in pixels of ranger
-            x = rangerIndex.x() * BLOCK_WIDTH;
-            y = rangerIndex.y() * BLOCK_HEIGHT;
+            x = rangerIndex.x() * blockWidth;
+            y = rangerIndex.y() * blockHeight;
         }
 
         // Otherwise draw the ranger at the start
         else {
-            x = startIndex.x() * BLOCK_WIDTH;
-            y = startIndex.y() * BLOCK_HEIGHT;
+            x = startIndex.x() * blockWidth;
+            y = startIndex.y() * blockHeight;
         }
 
         // Draws ranger
-        ranger.draw(this, g, currentDirection, x, y, BLOCK_WIDTH, BLOCK_HEIGHT);
+        ranger.draw(this, g, currentDirection, x, y, blockWidth, blockHeight);
 
         // Draws the border around every block
         for (PathBlock[] blocks : maze) {
@@ -324,12 +334,12 @@ public class PathFinder extends JPanel implements ActionListener
         // Initializes each block
         // Every Block is a Trail by default until set otherwise
         // Multiplies by dimensions for no spacing between blocks
-        for (int i = 0; i < MAZE_HEIGHT; i++)
-            for (int j = 0; j < MAZE_WIDTH; j++) {
+        for (int i = 0; i < mazeHeight; i++)
+            for (int j = 0; j < mazeWidth; j++) {
                 if (trees[i][j] == 1)
-                    maze[i][j] = new Tree(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
                 else {
-                    maze[i][j] = new Trail(j * BLOCK_WIDTH, i * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT);
+                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
 
                     if (trees[i][j] == 2)
                         ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);

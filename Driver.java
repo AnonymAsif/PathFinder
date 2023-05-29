@@ -20,13 +20,24 @@ public class Driver extends JFrame implements PathFinderListener
     // Menubar that contains maze and colour editor commands
     private final JMenuBar menubar;
 
+    // Editor that can create and edit mazes
+    private final MazeEditor editor;
+
+    // Dimensions of the maze
+    private static final int MAZE_HEIGHT = 12;
+    private static final int MAZE_WIDTH = 12;
+
+    // Dimensions of the main PathFinder panel
+    private static final int PANEL_HEIGHT = 600;
+    private static final int PANEL_WIDTH = 600;
+
     public Driver() {
         // Sets up frame for the game
         setTitle("Maze Pathfinder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // Initializes Pathfinder panel
-        pathfinder = new PathFinder();
+        pathfinder = new PathFinder(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
 
         // Adds this as a PathFinderListener to pathfinder
         pathfinder.addPathFinderListener(this);
@@ -53,6 +64,9 @@ public class Driver extends JFrame implements PathFinderListener
         menubar = new JMenuBar();
         setupMenuBar();
 
+        // Creates a new maze editor
+        editor = new MazeEditor();
+
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -77,6 +91,7 @@ public class Driver extends JFrame implements PathFinderListener
         JMenuItem editSpeed = new JMenuItem("Speed");
 
         // Adds the actions to the buttons
+        editMaze.addActionListener(e -> editor.setVisible(true));
         editSpeed.addActionListener(this::setPathFinderSpeed);
 
         // Adds the menu items to the Edit menu

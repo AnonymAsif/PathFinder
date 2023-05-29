@@ -65,7 +65,7 @@ public class Driver extends JFrame implements PathFinderListener
         setupMenuBar();
 
         // Creates a new maze editor
-        editor = new MazeEditor();
+        editor = new MazeEditor(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
 
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);

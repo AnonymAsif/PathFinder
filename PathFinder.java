@@ -20,11 +20,8 @@ import java.awt.event.ActionEvent;
  * @author Asif Rahman
  * @version 09/05/2023
  */
-public class PathFinder extends JPanel implements ActionListener
+public class PathFinder extends MazePanel implements ActionListener
 {
-    // Record class used for 2D coordinates and moves
-    public record Coordinate2D(int x, int y) {}
-
     // Enum of directions for pathfinding movement
     public enum Directions {
         NORTH(0, -1), // moves one up
@@ -45,20 +42,6 @@ public class PathFinder extends JPanel implements ActionListener
             return move;
         }
     }
-
-
-    
-    // Dimensions of the maze
-    private final int mazeHeight;
-    private final int mazeWidth;
-
-    // Dimensions of the panel
-    private final int panelHeight;
-    private final int panelWidth;
-    
-    // Dimensions of each block
-    private final int blockHeight;
-    private final int blockWidth;
     
     // Number of ms between timer events
     private static int updateTime = 75;
@@ -66,18 +49,9 @@ public class PathFinder extends JPanel implements ActionListener
     // Maps traversal states to the direction of movement
     private static EnumMap<Trail.TraversalState, Directions> stateDirections = null;
     
-    // 2D array of PathBlock
-    private final PathBlock[][] maze;
-    
     // Stack for Depth First Search
     // Contains Coordinate2D for location in maze
     private final Stack<Coordinate2D> traversalStack;
-
-    // Ranger that will explore the maze
-    private final Ranger ranger;
-
-    // Starting location of the Ranger
-    private final Coordinate2D startIndex;
 
     // Direction that the Ranger is currently facing
     private Directions currentDirection;
@@ -90,18 +64,8 @@ public class PathFinder extends JPanel implements ActionListener
     
     // Constructor
     public PathFinder(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
-        // Saves maze and panel dimensions
-        this.mazeHeight = mazeHeight;
-        this.mazeWidth = mazeWidth;
-        this.panelHeight = panelHeight;
-        this.panelWidth = panelWidth;
-
-        // Calculates dimensions of each block
-        blockHeight = panelHeight / mazeHeight;
-        blockWidth = panelWidth / mazeWidth;
-
-        // Creates new maze
-        maze = new PathBlock[mazeHeight][mazeWidth];
+        // Calls MazePanel constructor
+        super(mazeHeight, mazeWidth, panelHeight, panelWidth);
 
         // Initializes stack of indices
         traversalStack = new Stack<>();
@@ -136,9 +100,7 @@ public class PathFinder extends JPanel implements ActionListener
                 }
             }
 
-        // Creates a new Ranger at 0, 0
-        ranger = new Ranger();
-        startIndex = new Coordinate2D(0, 0);
+        // Adds the rangers starting index to the Stack
         traversalStack.push(startIndex);
 
         // Facing south to start purely for design

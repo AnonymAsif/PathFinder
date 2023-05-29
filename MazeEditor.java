@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 /**
@@ -8,7 +10,7 @@ import java.awt.*;
  * @author Asif Rahman
  * @version 28/05/2023
  */
-public class MazeEditor extends JDialog {
+public class MazeEditor extends JDialog implements ListSelectionListener {
     // Dimensions of the maze
     private final int mazeHeight;
     private final int mazeWidth;
@@ -16,10 +18,6 @@ public class MazeEditor extends JDialog {
     // Dimensions of the panel
     private final int panelHeight;
     private final int panelWidth;
-
-    // Dimensions of each block
-    private final int blockHeight;
-    private final int blockWidth;
 
     // JList of icons for the user to choose when editing
     private final JList<Icon> iconList;
@@ -31,10 +29,6 @@ public class MazeEditor extends JDialog {
         this.mazeWidth = mazeWidth;
         this.panelHeight = panelHeight;
         this.panelWidth = panelWidth;
-
-        // Calculates dimensions of each block
-        blockHeight = panelHeight / mazeHeight;
-        blockWidth = panelWidth / mazeWidth;
 
         // Sets up frame
         setTitle("Maze Editor");
@@ -56,8 +50,16 @@ public class MazeEditor extends JDialog {
         iconList = new JList<>(editorIcons);
         iconList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        // Listens to the JList events
+        iconList.addListSelectionListener(this);
+
         // Adds components and packs
         getContentPane().add(new JScrollPane(iconList), BorderLayout.EAST);
         pack();
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        int index = e.getFirstIndex();
     }
 }

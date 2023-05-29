@@ -12,7 +12,7 @@ public class PathFinderEvent extends EventObject {
 
     /** The location of the Ranger in the maze,
      * given with an X and Y index at the time of the event.*/
-    public PathFinder.Coordinate2D rangerLocation;
+    public MazePanel.Coordinate2D rangerLocation;
 
     /** The direction that the Ranger was facing
      * at the time of the event. */

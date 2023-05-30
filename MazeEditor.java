@@ -45,6 +45,8 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
           new ImageIcon("States/cabin.png") // Cabin image
         };
 
+        EditorPanel.DrawableBlocks.values();
+
         // Creates JList of icons to put on the right
         // Limits selections to one at a time
         iconList = new JList<>(editorIcons);

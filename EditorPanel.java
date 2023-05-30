@@ -15,6 +15,27 @@ import java.awt.event.MouseMotionListener;
  */
 public class EditorPanel extends MazePanel implements MouseListener, MouseMotionListener {
 
+    public enum DrawableBlocks {
+        // Gets the file paths of the images using static methods
+        TREE(Tree.getImagePath()),
+        RANGER(Ranger.getDefaultImagePath()),
+        CABIN(Trail.TraversalState.CABIN.getFilePath());
+
+        // File path of the corresponding image
+        private final String filepath;
+
+        // Sets filepath
+        DrawableBlocks(String filepath) {
+            this.filepath = filepath;
+        }
+
+        // getter for the filepath
+        public String getFilepath() {
+            return filepath;
+        }
+
+    }
+
     public EditorPanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
         // Calls MazePanel constructor
         super(mazeHeight, mazeWidth, panelHeight, panelWidth);

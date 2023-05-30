@@ -23,6 +23,10 @@ public class Ranger
     // EnumMap storing the for each direction
     private final EnumMap<PathFinder.Directions, ImageIcon> images;
 
+    // File paths for success and failure images
+    private static final String SUCCESS_ICON_PATH = "Ranger/success.png";
+    private static final String FAILURE_ICON_PATH = "Ranger/failure.png";
+
     // ImageIcon drawn when Ranger is successful
     private final ImageIcon successIcon;
 
@@ -61,8 +65,8 @@ public class Ranger
         }
 
         // Attempts to load in success and failure icons
-        successIcon = getImage("Ranger/success.png");
-        failureIcon = getImage("Ranger/failure.png");
+        successIcon = getImage(SUCCESS_ICON_PATH);
+        failureIcon = getImage(FAILURE_ICON_PATH);
     }
 
     // Attempts to load an image from a file path
@@ -127,5 +131,11 @@ public class Ranger
     // Returns the default colour of the Ranger
     public Color getDefaultColour() {
         return defaultColour;
+    }
+
+    // static method returning the "Default" image
+    // The default image of the ranger is the success image
+    public static String getDefaultImagePath() {
+        return SUCCESS_ICON_PATH;
     }
 }

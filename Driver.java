@@ -131,14 +131,20 @@ public class Driver extends JFrame implements PathFinderListener
         // Lets the user know if successful
         try {
             int newTimerDelay = Integer.parseInt(inputString);
-            pathfinder.setUpdateTime(newTimerDelay);
 
-            JOptionPane.showMessageDialog(this, "Successfully updated timer delay.");
+            // Makes sure that the new delay is a positive number
+            if (newTimerDelay > 0) {
+                pathfinder.setUpdateTime(newTimerDelay);
+                JOptionPane.showMessageDialog(this, "Successfully updated timer delay.");
+            }
+
+            // Throws a NumberFormatException so the invalid timer message displays
+            else throw new NumberFormatException();
         }
 
         // If the input was invalid, let the user know the operation failed
         catch (NumberFormatException exception) {
-            JOptionPane.showMessageDialog(this, "Invalid timer delay. Please enter an integer.");
+            JOptionPane.showMessageDialog(this, "Invalid timer delay. Please enter a positive integer.");
         }
     }
 

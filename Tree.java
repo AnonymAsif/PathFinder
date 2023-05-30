@@ -11,7 +11,7 @@ import java.awt.*;
 public class Tree extends PathBlock
 {
     // File path to find the tree image
-    public static final String imagePath = "tree.png";
+    private static final String IMAGE_PATH = "tree.png";
 
     // Default colour if icon doesn't work
     private static final Color treeColour = Color.GRAY;
@@ -22,7 +22,7 @@ public class Tree extends PathBlock
         super(x, y, width, height);
 
         // Updates the icon of this Tree to the tree image and colour
-        updateIcon(imagePath, treeColour);
+        updateIcon(IMAGE_PATH, treeColour);
     }
 
     // Returns ImageIcon
@@ -33,5 +33,10 @@ public class Tree extends PathBlock
     // Returns default Color used when icon is not valid
     public Color getDefaultColour() {
         return treeColour;
+    }
+
+    // Static method returning the imagePath
+    public static String getImagePath() {
+        return IMAGE_PATH;
     }
 }

@@ -52,6 +52,9 @@ public abstract class MazePanel extends JPanel {
 
         // Creates new maze
         maze = new PathBlock[mazeHeight][mazeWidth];
+        
+        // sets preferred size
+        setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
 
     // Calls the draw methods on every PathBlock

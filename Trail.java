@@ -46,7 +46,7 @@ public class Trail extends PathBlock
     }
 
     // The traversal state of this block
-    private TraversalState traversalState;
+    private TraversalState traversalState; 
 
     // Constructor
     public Trail(int x, int y, int width, int height) {

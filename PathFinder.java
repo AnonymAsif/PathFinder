@@ -122,9 +122,6 @@ public class PathFinder extends MazePanel implements ActionListener
 
         // Initializes ArrayList of listeners
         listeners = new ArrayList<>();
-
-        // sets preferred size
-        setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
     
     // Action performed called by timer

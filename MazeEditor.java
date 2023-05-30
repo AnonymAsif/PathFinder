@@ -1,7 +1,11 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * Maze editor class for a maze solver
@@ -18,6 +22,9 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     // Dimensions of the panel
     private final int panelHeight;
     private final int panelWidth;
+    
+    // The JPanel of the editor that displays the edited maze
+    private final EditorPanel editorPanel;
 
     // JList of icons for the user to choose when editing
     private final JList<Icon> iconList;
@@ -33,19 +40,15 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         // Sets up frame
         setTitle("Maze Editor");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        setPreferredSize(new Dimension(200, 200));
 
         // Sets editor as a modal window
         setModalityType(ModalityType.APPLICATION_MODAL);
+        
+        // Initializes editor panel
+        editorPanel = new EditorPanel(mazeHeight, mazeWidth, panelHeight, panelWidth);
 
-        // Creates list of icons
-        ImageIcon[] editorIcons = new ImageIcon[] {
-          new ImageIcon("tree.png"), // Tree image
-          new ImageIcon("Ranger/failure.png"), // Ranger image
-          new ImageIcon("States/cabin.png") // Cabin image
-        };
-
-        EditorPanel.DrawableBlocks.values();
+        // Gets an array of icons from the DrawableBlocks enum
+        ImageIcon[] editorIcons = EditorPanel.DrawableBlocks.getDrawableBlockIcons();
 
         // Creates JList of icons to put on the right
         // Limits selections to one at a time
@@ -56,12 +59,18 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         iconList.addListSelectionListener(this);
 
         // Adds components and packs
+        getContentPane().add(editorPanel);
         getContentPane().add(new JScrollPane(iconList), BorderLayout.EAST);
         pack();
     }
 
+    // Fired when the selection of the JList changes
     @Override
     public void valueChanged(ListSelectionEvent e) {
+        // The index in the JList of the new selected icon
         int index = e.getFirstIndex();
+        
+        // Updates the icon in editor panel
+        editorPanel.setCurrentIcon(index);
     }
 }

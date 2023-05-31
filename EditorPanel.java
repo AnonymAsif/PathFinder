@@ -17,17 +17,20 @@ import java.util.Arrays;
 public class EditorPanel extends MazePanel implements MouseListener, MouseMotionListener {
 
     // Enum of the different drawable blocks in the maze
-    public enum DrawableBlocks {
+    public enum EditorStates {
         // Gets the file paths of the images using static methods
         TREE(Tree.getImagePath()),
         RANGER(Ranger.getDefaultImagePath()),
-        CABIN(Trail.TraversalState.CABIN.getFilePath());
+        CABIN(Trail.TraversalState.CABIN.getFilePath()),
+
+        // ERASER is unique to EditorPanel, get the file path directly
+        ERASER(null);
 
         // File path of the corresponding image
         private final String filepath;
 
         // Sets filepath
-        DrawableBlocks(String filepath) {
+        EditorStates(String filepath) {
             this.filepath = filepath;
         }
 
@@ -46,7 +49,7 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     }
     
     // The current block to draw when the user clicks on a block
-    private DrawableBlocks currentIcon = DrawableBlocks.TREE;
+    private EditorStates currentIcon = EditorStates.TREE;
 
     // The location of the cabin, null if it is not placed
     // There should not be more than one cabin
@@ -74,7 +77,7 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     // Based on the index of the selected icon
     public void setCurrentIcon(int index) {
         // Updates currentIcon to the value at the given index in DrawableBlocks
-        currentIcon = DrawableBlocks.values()[index];
+        currentIcon = EditorStates.values()[index];
     }
 
     @Override
@@ -166,6 +169,18 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                  // Sets the state of the Trail to CABIN and save cabin index
                  cabinIndex = new Coordinate2D(x, y);
                  ((Trail)maze[y][x]).setTraversalState(Trail.TraversalState.CABIN);
+             }
+             case ERASER -> {
+                 // If the block is a ranger, set start index to null
+                 if (startIndex != null && x == startIndex.x() && y == startIndex.y())
+                     startIndex = null;
+
+                 // Do the same for cabin, set its index to null if being erased
+                 else if (cabinIndex != null && x == cabinIndex.x() && y == cabinIndex.y())
+                     cabinIndex = null;
+
+                 // Create a new Trail object in case it is a cabin or Tree
+                 maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
              }
          }
 

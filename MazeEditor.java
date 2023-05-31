@@ -2,10 +2,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 /**
  * Maze editor class for a maze solver
@@ -47,8 +43,8 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         // Initializes editor panel
         editorPanel = new EditorPanel(mazeHeight, mazeWidth, panelHeight, panelWidth);
 
-        // Gets an array of icons from the DrawableBlocks enum
-        ImageIcon[] editorIcons = EditorPanel.DrawableBlocks.getDrawableBlockIcons();
+        // Gets an array of icons from the EditorStates enum
+        ImageIcon[] editorIcons = EditorPanel.EditorStates.getDrawableBlockIcons();
 
         // Creates JList of icons to put on the right
         // Limits selections to one at a time

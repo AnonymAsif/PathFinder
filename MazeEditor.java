@@ -68,7 +68,9 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         // The index in the JList of the new selected icon
-        int index = e.getFirstIndex();
+        int index = iconList.getSelectedIndex();
+
+        System.out.println("index: " + index);
         
         // Updates the icon in editor panel
         editorPanel.setCurrentIcon(index);

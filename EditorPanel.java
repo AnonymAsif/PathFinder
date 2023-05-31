@@ -24,7 +24,7 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         CABIN(Trail.TraversalState.CABIN.getFilePath()),
 
         // ERASER is unique to EditorPanel, get the file path directly
-        ERASER(null);
+        ERASER("eraser.png");
 
         // File path of the corresponding image
         private final String filepath;

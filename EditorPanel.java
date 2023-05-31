@@ -59,14 +59,8 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         // Calls MazePanel constructor
         super(mazeHeight, mazeWidth, panelHeight, panelWidth);
     
-        // Maze was initialized by super constructor
-        // Initializes all PathBlocks in maze to Trails by default
-        for (int i = 0; i < mazeHeight; i++) {
-            for (int j = 0; j < mazeWidth; j++) {
-                // Trail is a subclass of Rectangle, so pass in coordinates and dimensions
-                maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-            }
-        }
+        // Clear method will setup all PathBlock objects to default
+        clear();
         
         // Adds this class as a mouse and mouse motion listener
         addMouseListener(this);
@@ -78,6 +72,22 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     public void setCurrentIcon(int index) {
         // Updates currentIcon to the value at the given index in DrawableBlocks
         currentIcon = EditorStates.values()[index];
+    }
+    
+    // Erases the given square in maze
+    // If a ranger or cabin was there, set its index to null
+    private void erase(int x, int y) {
+        // If the block is a ranger, set start index to null
+         if (startIndex != null && x == startIndex.x() && y == startIndex.y())
+             startIndex = null;
+
+         // Do the same for cabin, set its index to null if being erased
+         else if (cabinIndex != null && x == cabinIndex.x() && y == cabinIndex.y()) {
+             cabinIndex = null;
+        }
+            
+         // Create a new Trail object in case it is a cabin or Tree
+         maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
     }
 
     @Override
@@ -99,65 +109,25 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         // Truncates extra pixels and divides by block size to get index
         int x = (e.getX() - e.getX() % blockWidth) / blockWidth;
         int y = (e.getY() - e.getY() % blockHeight) / blockHeight;
-
-        System.out.printf("x: %d, y: %d\n", x, y);
-        System.out.println(currentIcon.toString());
+        
+        // If the index is invalid, return
+        if (x < 0 || x > mazeWidth) return;
+        if (y < 0 || y > mazeHeight) return;
+        
+        // Erases whatever was there previously
+        erase(x, y);
 
         // Places the correct icon on the square based on currentIcon
          switch (currentIcon) {
              case TREE -> {
-                 // If the square is already a tree do nothing
-                 if (maze[y][x] instanceof Tree) return;
-
-                 // If the square is where the ranger is (start index)
-                 // Set the start index to null and replace it
-                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
-                     startIndex = null;
-
-                 // If the block is a Trail and has a Cabin, set cabinIndex to null as it was replaced
-                 else if (maze[y][x] instanceof Trail trail && trail.getTraversalState() == Trail.TraversalState.CABIN) {
-                     cabinIndex = null;
-                 }
-
                  // Makes the block a Tree
                  maze[y][x] = new Tree(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
              }
              case RANGER -> {
-                 // If the square is where the ranger already is (start index), return
-                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
-                     return;
-
-                 // The ranger cannot start on a tree
-                 // If the block is Tree, replace it with a new Trail
-                 if (maze[y][x] instanceof Tree)
-                     maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-
-                 // If the block is a Trail and has a Cabin, replace it with UNDISCOVERED
-                 else if (maze[y][x] instanceof Trail trail && trail.getTraversalState() == Trail.TraversalState.CABIN) {
-                     trail.setTraversalState(Trail.TraversalState.UNDISCOVERED);
-
-                     // Sets cabinIndex to null since it was replaced
-                     cabinIndex = null;
-                 }
-
                  // Updates start index of ranger
                  startIndex = new Coordinate2D(x, y);
              }
              case CABIN -> {
-                 // If the block is a trail, and it is a cabin, return
-                 if (maze[y][x] instanceof Trail trail) {
-                     if (trail.getTraversalState() == Trail.TraversalState.CABIN) return;
-                 }
-
-                 // The cabin cannot be on a tree
-                 // If the block is Tree, replace it with a new Trail
-                 else maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-
-                 // If the square is where the ranger is (start index)
-                 // Set the start index to null and replace it with a cabin
-                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
-                     startIndex = null;
-
                  // If there is another cabin, cabinIndex is not null
                  // remove that cabin and change the cabinIndex to this index
                  if (cabinIndex != null) {
@@ -170,29 +140,37 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                  cabinIndex = new Coordinate2D(x, y);
                  ((Trail)maze[y][x]).setTraversalState(Trail.TraversalState.CABIN);
              }
-             case ERASER -> {
-                 // If the block is a ranger, set start index to null
-                 if (startIndex != null && x == startIndex.x() && y == startIndex.y())
-                     startIndex = null;
-
-                 // Do the same for cabin, set its index to null if being erased
-                 else if (cabinIndex != null && x == cabinIndex.x() && y == cabinIndex.y())
-                     cabinIndex = null;
-
-                 // Create a new Trail object in case it is a cabin or Tree
-                 maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-             }
+             
+             // Does nothing as current square was already erased
+             case ERASER -> {}
          }
 
          // Repaint the panel
         repaint();
     }
     
+    // Clears everything off of the maze
+    public void clear() {
+        // Sets start index and cabin index to null
+        startIndex = null;
+        cabinIndex = null;
+        
+        for (int i = 0; i < mazeHeight; i++) {
+            for (int j = 0; j < mazeWidth; j++) {
+                // Trail is a subclass of Rectangle, so pass in coordinates and dimensions
+                maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
+            }
+        }
+    }
+        
+    
+    // Calls the mousePressed method if the mouse is held above a square
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        mousePressed(e);
     }
 
+    
     @Override
     public void mouseClicked(MouseEvent e) {}
 

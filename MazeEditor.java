@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 /**
  * Maze editor class for a maze solver
@@ -21,6 +22,9 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     
     // The JPanel of the editor that displays the edited maze
     private final EditorPanel editorPanel;
+    
+    // ButtonPanel that contains buttons for editorPanel actions
+    private final ButtonPanel buttonPanel;
 
     // JList of icons for the user to choose when editing
     private final JList<Icon> iconList;
@@ -53,6 +57,20 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
 
         // Listens to the JList events
         iconList.addListSelectionListener(this);
+        
+        // Creates a new buttonUI for the ButtonPanel
+        WorldsBestButtonUI ui = new WorldsBestButtonUI(Color.LIGHT_GRAY, Color.BLACK);
+        
+        // There will be two buttons, Clear and Apply
+        // Each button has a name and an action corresponding to a public method in pathfinder
+        String[] buttonNames = new String[] {"Clear", "Apply"};
+        ButtonAction[] buttonActions = new ButtonAction[] {
+            
+        };
+        
+        // Creates ButtonPanel by passing in the names, actions and states of the buttons
+        // Also passes in the width of the panel, background colour and the ButtonUI
+        buttonPanel = new ButtonPanel(buttonNames, buttonActions, editorPanel.getWidth(), Color.ORANGE, ui);
 
         // Adds components and packs
         getContentPane().add(editorPanel);
@@ -65,8 +83,6 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
         // The index in the JList of the new selected icon
         int index = iconList.getSelectedIndex();
-
-        System.out.println("index: " + index);
         
         // Updates the icon in editor panel
         editorPanel.setCurrentIcon(index);

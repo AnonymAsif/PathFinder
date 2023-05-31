@@ -48,6 +48,10 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     // The current block to draw when the user clicks on a block
     private DrawableBlocks currentIcon = DrawableBlocks.TREE;
 
+    // The location of the cabin, null if it is not placed
+    // There should not be more than one cabin
+    private Coordinate2D cabinIndex = null;
+
     public EditorPanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
         // Calls MazePanel constructor
         super(mazeHeight, mazeWidth, panelHeight, panelWidth);
@@ -107,6 +111,11 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                  if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
                      startIndex = null;
 
+                 // If the block is a Trail and has a Cabin, set cabinIndex to null as it was replaced
+                 else if (maze[y][x] instanceof Trail trail && trail.getTraversalState() == Trail.TraversalState.CABIN) {
+                     cabinIndex = null;
+                 }
+
                  // Makes the block a Tree
                  maze[y][x] = new Tree(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
              }
@@ -119,6 +128,14 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                  // If the block is Tree, replace it with a new Trail
                  if (maze[y][x] instanceof Tree)
                      maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+
+                 // If the block is a Trail and has a Cabin, replace it with UNDISCOVERED
+                 else if (maze[y][x] instanceof Trail trail && trail.getTraversalState() == Trail.TraversalState.CABIN) {
+                     trail.setTraversalState(Trail.TraversalState.UNDISCOVERED);
+
+                     // Sets cabinIndex to null since it was replaced
+                     cabinIndex = null;
+                 }
 
                  // Updates start index of ranger
                  startIndex = new Coordinate2D(x, y);
@@ -138,7 +155,16 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                  if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
                      startIndex = null;
 
-                 // Sets the state of the Trail to CABIN
+                 // If there is another cabin, cabinIndex is not null
+                 // remove that cabin and change the cabinIndex to this index
+                 if (cabinIndex != null) {
+                     int xInd = cabinIndex.x();
+                     int yInd = cabinIndex.y();
+                     ((Trail)maze[yInd][xInd]).setTraversalState(Trail.TraversalState.UNDISCOVERED);
+                 }
+
+                 // Sets the state of the Trail to CABIN and save cabin index
+                 cabinIndex = new Coordinate2D(x, y);
                  ((Trail)maze[y][x]).setTraversalState(Trail.TraversalState.CABIN);
              }
          }

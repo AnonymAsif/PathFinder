@@ -13,6 +13,27 @@ public abstract class MazePanel extends JPanel {
     // Record class used for 2D coordinates and moves
     public record Coordinate2D(int x, int y) {}
 
+    // Enum of directions for pathfinding movement
+    public enum Directions {
+        NORTH(0, -1), // moves one up
+        EAST(1, 0), // moves one right
+        SOUTH(0, 1), // moves one down
+        WEST(-1, 0); // moves one left
+
+        // 2d coordinates storing the x and y vectors
+        private final Coordinate2D move;
+
+        // Saves x and y to moves
+        Directions(int x, int y) {
+            move = new Coordinate2D(x, y);
+        }
+
+        // Getter method for move
+        public Coordinate2D getMove() {
+            return move;
+        }
+    }
+
     // Dimensions of the maze
     protected final int mazeHeight;
     protected final int mazeWidth;
@@ -29,7 +50,7 @@ public abstract class MazePanel extends JPanel {
     protected final Ranger ranger;
 
     // Starting location of the Ranger
-    protected final Coordinate2D startIndex;
+    protected Coordinate2D startIndex;
 
     // 2D array of PathBlock
     protected final PathBlock[][] maze;

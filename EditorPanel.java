@@ -61,7 +61,9 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
             }
         }
         
-        repaint();
+        // Adds this class as a mouse and mouse motion listener
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
     
     // Sets a new currentIcon value as the selected icon changed
@@ -75,15 +77,74 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     public void paintComponent(Graphics graphics) {
         // Calls MazePanel paintComponent method
         super.paintComponent(graphics);
+
+        // If the ranger is currently placed, draw the ranger
+        // Draw the ranger facing SOUTH
+        if (startIndex != null) {
+            ranger.draw(this, graphics, Directions.SOUTH,
+                    startIndex.x() * blockWidth, startIndex.y() * blockHeight, blockWidth, blockHeight);
+        }
     }
     
     @Override
     public void mousePressed(MouseEvent e) {
-        // switch (currentIcon) {
-            // case TREE -> ;
-            // case RANGER -> return;
-            // case CABIN -> return;
-        // }
+        // Calculates index in maze based on coordinates (pixels) of click
+        // Truncates extra pixels and divides by block size to get index
+        int x = (e.getX() - e.getX() % blockWidth) / blockWidth;
+        int y = (e.getY() - e.getY() % blockHeight) / blockHeight;
+
+        System.out.printf("x: %d, y: %d\n", x, y);
+        System.out.println(currentIcon.toString());
+
+        // Places the correct icon on the square based on currentIcon
+         switch (currentIcon) {
+             case TREE -> {
+                 // If the square is already a tree do nothing
+                 if (maze[y][x] instanceof Tree) return;
+
+                 // If the square is where the ranger is (start index)
+                 // Set the start index to null and replace it
+                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
+                     startIndex = null;
+
+                 // Makes the block a Tree
+                 maze[y][x] = new Tree(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+             }
+             case RANGER -> {
+                 // If the square is where the ranger already is (start index), return
+                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
+                     return;
+
+                 // The ranger cannot start on a tree
+                 // If the block is Tree, replace it with a new Trail
+                 if (maze[y][x] instanceof Tree)
+                     maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+
+                 // Updates start index of ranger
+                 startIndex = new Coordinate2D(x, y);
+             }
+             case CABIN -> {
+                 // If the block is a trail, and it is a cabin, return
+                 if (maze[y][x] instanceof Trail trail) {
+                     if (trail.getTraversalState() == Trail.TraversalState.CABIN) return;
+                 }
+
+                 // The cabin cannot be on a tree
+                 // If the block is Tree, replace it with a new Trail
+                 else maze[y][x] = new Trail(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+
+                 // If the square is where the ranger is (start index)
+                 // Set the start index to null and replace it with a cabin
+                 if (startIndex != null && startIndex.x() == x && startIndex.y() == y)
+                     startIndex = null;
+
+                 // Sets the state of the Trail to CABIN
+                 ((Trail)maze[y][x]).setTraversalState(Trail.TraversalState.CABIN);
+             }
+         }
+
+         // Repaint the panel
+        repaint();
     }
     
     @Override

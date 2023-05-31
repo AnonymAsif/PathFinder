@@ -21,7 +21,7 @@ public class Ranger
     private static final Color defaultColour = Color.ORANGE;
 
     // EnumMap storing the for each direction
-    private final EnumMap<PathFinder.Directions, ImageIcon> images;
+    private final EnumMap<MazePanel.Directions, ImageIcon> images;
 
     // File paths for success and failure images
     private static final String SUCCESS_ICON_PATH = "Ranger/success.png";
@@ -41,7 +41,7 @@ public class Ranger
 
     public Ranger() {
         // Initializes EnumMap
-        images = new EnumMap<>(PathFinder.Directions.class);
+        images = new EnumMap<>(MazePanel.Directions.class);
 
         // imagesLoaded stays true until any image fails to load
         imagesLoaded = true;
@@ -86,7 +86,7 @@ public class Ranger
 
     // Draws the Ranger using the icon if possible
     // Otherwise it fills the given area with the default colour
-    public void draw(JPanel panel, Graphics g, PathFinder.Directions direction, int x, int y, int width, int height) {
+    public void draw(JPanel panel, Graphics g, MazePanel.Directions direction, int x, int y, int width, int height) {
         // If the icon is loaded, draw the icon
         if (imagesLoaded) {
             // If the ranger is still traversing, get the image of the ranger facing a direction
@@ -124,7 +124,7 @@ public class Ranger
     }
     
     // Returns the image associated with the direction
-    public ImageIcon getIcon(PathFinder.Directions direction) {
+    public ImageIcon getIcon(MazePanel.Directions direction) {
         return images.get(direction);
     }
     

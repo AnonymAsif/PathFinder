@@ -16,7 +16,7 @@ public class PathFinderEvent extends EventObject {
 
     /** The direction that the Ranger was facing
      * at the time of the event. */
-    public PathFinder.Directions rangerDirection;
+    public MazePanel.Directions rangerDirection;
 
     /**
      * Constructs a PathFinder Event, saving the PathFinder source

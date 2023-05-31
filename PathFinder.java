@@ -1,12 +1,8 @@
-import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Stack;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -22,27 +18,6 @@ import java.awt.event.ActionEvent;
  */
 public class PathFinder extends MazePanel implements ActionListener
 {
-    // Enum of directions for pathfinding movement
-    public enum Directions {
-        NORTH(0, -1), // moves one up
-        EAST(1, 0), // moves one right
-        SOUTH(0, 1), // moves one down
-        WEST(-1, 0); // moves one left
-        
-        // 2d coordinates storing the x and y vectors
-        private final Coordinate2D move;
-        
-        // Saves x and y to moves
-        Directions(int x, int y) {
-            move = new Coordinate2D(x, y);
-        }
-
-        // Getter method for move
-        private Coordinate2D getMove() {
-            return move;
-        }
-    }
-    
     // Number of ms between timer events
     private static int updateTime = 75;
 

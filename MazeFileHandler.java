@@ -13,9 +13,15 @@ public class MazeFileHandler
     private final String MAZE_FILE_PATH = "maze.txt";
     
     // Maze to parse, read and write from/to file
-    private PathBlock[] maze;
+    private PathBlock[][] maze;
     
+    // Reads maze from maze file
     public void readMaze() {
+        
+    }
+    
+    // Writes maze to maze file
+    public void writeMaze() {
         
     }
 }

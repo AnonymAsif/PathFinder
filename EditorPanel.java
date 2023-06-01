@@ -111,8 +111,8 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         int y = (e.getY() - e.getY() % blockHeight) / blockHeight;
         
         // If the index is invalid, return
-        if (x < 0 || x > mazeWidth) return;
-        if (y < 0 || y > mazeHeight) return;
+        if (x < 0 || x >= mazeWidth) return;
+        if (y < 0 || y >= mazeHeight) return;
         
         // Erases whatever was there previously
         erase(x, y);

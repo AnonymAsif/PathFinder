@@ -1,5 +1,10 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 /**
@@ -65,7 +70,7 @@ public class Driver extends JFrame implements PathFinderListener
         setupMenuBar();
 
         // Creates a new maze editor
-        editor = new MazeEditor(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
+        editor = new MazeEditor(pathfinder);
 
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);

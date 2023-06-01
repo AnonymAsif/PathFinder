@@ -1,5 +1,8 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.BasicStroke;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * Maze JPanel for a maze solver
@@ -53,7 +56,7 @@ public abstract class MazePanel extends JPanel {
     protected Coordinate2D startIndex;
 
     // 2D array of PathBlock
-    protected final PathBlock[][] maze;
+    protected PathBlock[][] maze;
 
 
     public MazePanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
@@ -102,5 +105,62 @@ public abstract class MazePanel extends JPanel {
                 block.drawBorder(g);
             }
         }
+    }
+
+    /* Getters for dimensions and coordinates */
+    public int getMazeHeight() {
+        return mazeHeight;
+    }
+
+    public int getMazeWidth() {
+        return mazeWidth;
+    }
+
+    public int getPanelHeight() {
+        return panelHeight;
+    }
+
+    public int getPanelWidth() {
+        return panelWidth;
+    }
+
+    /* Setter and Getter methods for maze */
+    public PathBlock[][] getMaze() {
+        return maze;
+    }
+
+    public void setMaze(PathBlock[][] maze) {
+        // Setter throws exception given null maze
+        if (maze == null)
+            throw new IllegalArgumentException("Maze cannot be null");
+
+        // Sets maze
+        this.maze = maze;
+
+        // Repaints since maze has been updated
+        repaint();
+    }
+
+    /* Setter and Getter methods for maze */
+    public Coordinate2D getStartIndex() {
+        return startIndex;
+    }
+
+    // Setter throws exception given null or invalid index
+    public void setStartIndex(Coordinate2D startIndex) {
+        // Null index
+        if (startIndex == null)
+            throw new IllegalArgumentException("Start index cannot be null");
+
+        // Given index is out of bounds
+        if (startIndex.x() < 0 || startIndex.x() >= mazeWidth || // Invalid x
+                startIndex.y() < 0 || startIndex.y() >= mazeHeight) // Invalid y
+            throw new IllegalArgumentException("Start index out of bounds");
+
+        // Sets start index
+        this.startIndex = startIndex;
+
+        // Repaints since maze has been updated
+        repaint();
     }
 }

@@ -1,5 +1,7 @@
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.EnumMap;
 
 /**

@@ -112,13 +112,13 @@ public class PathFinder extends MazePanel implements ActionListener
         Coordinate2D rangerIndex = traversalStack.peek();
         
         // Variables with short names for convenience
-        int row = rangerIndex.x();
-        int col = rangerIndex.y();
+        int col = rangerIndex.x();
+        int row = rangerIndex.y();
 
         
         // If the ranger is not on a Trail, it is likely on a Tree
         // Throw an Exception because that should never happen
-        if (!(maze[col][row] instanceof Trail currentBlock)) {
+        if (!(maze[row][col] instanceof Trail currentBlock)) {
             throw new IllegalStateException("Ranger must be on a Trail");
         }
 
@@ -128,7 +128,7 @@ public class PathFinder extends MazePanel implements ActionListener
             // Attempts to add the block in that direction to the stack
             // Uses the state direction that corresponds with the current traversal state
             case DISCOVERED_N, DISCOVERED_E, DISCOVERED_S, DISCOVERED_W ->
-                    addIfUndiscovered(row, col, stateDirections.get(currentBlock.getTraversalState()));
+                    addIfUndiscovered(col, row, stateDirections.get(currentBlock.getTraversalState()));
 
             // This path is fully explored, pop it from the stack
             // Updates the direction of the ranger
@@ -142,11 +142,11 @@ public class PathFinder extends MazePanel implements ActionListener
                 }
 
                 // Gets coordinates of previous Trail
-                row = traversalStack.peek().x();
-                col = traversalStack.peek().y();
+                col = traversalStack.peek().x();
+                row = traversalStack.peek().y();
 
                 // Updates the current direction based on the traversal state of the previous Trail
-                currentDirection = stateDirections.get(((Trail)maze[col][row]).getTraversalState());
+                currentDirection = stateDirections.get(((Trail)maze[row][col]).getTraversalState());
             }
 
             // Successfully found the cabin, end the PathFinder
@@ -189,6 +189,7 @@ public class PathFinder extends MazePanel implements ActionListener
     
     // Override of paintComponent to draw
     // Draws the ranger as the PathBlocks are drawn in superclass
+    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
@@ -214,6 +215,20 @@ public class PathFinder extends MazePanel implements ActionListener
 
         // Draws ranger
         ranger.draw(this, graphics, currentDirection, x, y, blockWidth, blockHeight);
+    }
+
+    // Overrides the setter for startIndex, since the stack needs to be updated as well
+    @Override
+    public void setStartIndex(Coordinate2D startIndex) {
+        // Validates and sets the new start index
+        super.setStartIndex(startIndex);
+
+        // Updates the stack to contain only the new index
+        traversalStack.clear();
+        traversalStack.push(startIndex);
+
+        // Repaints to show updates
+        repaint();
     }
 
     // Setter for the updateTime variable

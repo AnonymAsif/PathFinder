@@ -59,7 +59,7 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         // Calls MazePanel constructor
         super(mazeHeight, mazeWidth, panelHeight, panelWidth);
     
-        // Clear method will setup all PathBlock objects to default
+        // Clear method will set up all PathBlock objects to default
         clear();
         
         // Adds this class as a mouse and mouse motion listener
@@ -161,6 +161,16 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
                 maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
             }
         }
+
+        // Repaints panel
+        repaint();
+    }
+
+    // Returns if the maze is currently valid
+    public boolean isMazeValid() {
+        // Maze is valid if there is a cabin and a ranger
+        // Trees do not affect maze validity
+        return startIndex != null && cabinIndex != null;
     }
         
     

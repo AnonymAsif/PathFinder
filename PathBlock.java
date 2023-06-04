@@ -14,9 +14,8 @@ import javax.swing.ImageIcon;
 public abstract class PathBlock extends Rectangle
 {
     // Colours for drawing Paths
-    private static Color backgroundColour = Color.GREEN;
-    private static Color borderColour = Color.BLACK;
-    private static Color highlightColour = Color.BLUE;
+    private static final Color backgroundColour = new Color(0x6D7062);
+    private static final Color borderColour = Color.BLACK;
     
     // Image Icon to draw state
     protected ImageIcon icon;
@@ -80,40 +79,5 @@ public abstract class PathBlock extends Rectangle
         }
         // If the URL is invalid
         else validImage = false;
-    }
-
-    // Getters for the ImageIcon and default Color
-    public ImageIcon getIcon() {
-        return icon;
-    }
-
-    public Color getDefaultColour() {
-        return defaultColour;
-    }
-
-    // Static getter method returning the colours
-    public static Color getBackgroundColour() {
-        return backgroundColour;
-    }
-
-    public static Color getBorderColour() {
-        return borderColour;
-    }
-
-    public static Color getHighlightColour() {
-        return highlightColour;
-    }
-
-    // Static setter methods for changing the colours
-    public static void setBackgroundColour(Color bgColour) {
-        backgroundColour = bgColour;
-    }
-
-    public static void setBorderColour(Color bdColour) {
-        borderColour = bdColour;
-    }
-
-    public static void setHighlightColour(Color hlColour) {
-        highlightColour = hlColour;
     }
 }

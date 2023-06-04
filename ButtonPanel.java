@@ -18,9 +18,8 @@ import java.awt.BorderLayout;
  */
 
 public class ButtonPanel extends JPanel {
-
-    // JButtons in panel
-    private final JButton[] buttons;
+    // Background colour of panel
+    private static final Color BACKGROUND_COLOUR = new Color(0xb45252);
 
     // The height of the center panel with buttons
     private final int CENTER_HEIGHT = 35;
@@ -31,11 +30,14 @@ public class ButtonPanel extends JPanel {
     // Saves the number of buttons in panel
     private final int buttonCount;
 
-    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, int width, Color backgroundColour, ButtonUI ui) {
+    // JButtons in panel
+    private final JButton[] buttons;
+
+    public ButtonPanel(String[] buttonNames, ButtonAction[] actions, int width, ButtonUI ui) {
         // Sets panel size and background colour
         // Total height is equal to the sum of both margins and center height
         setPreferredSize(new Dimension(width, CENTER_HEIGHT + 2 * MARGIN));
-        setBackground(backgroundColour);
+        setBackground(BACKGROUND_COLOUR);
         setLayout(new BorderLayout());
 
         // Sets buttonCount to the number of button names
@@ -67,7 +69,7 @@ public class ButtonPanel extends JPanel {
 
         // Creates new JPanel to add the buttons to
         JPanel buttonJPanel = new JPanel();
-        buttonJPanel.setBackground(backgroundColour);
+        buttonJPanel.setBackground(BACKGROUND_COLOUR);
 
         // Adds every button to buttonJPanel
         for (JButton button : buttons) {
@@ -81,11 +83,11 @@ public class ButtonPanel extends JPanel {
         // They both have the same background colour
         JPanel northPanel = new JPanel();
         northPanel.setPreferredSize(new Dimension(0, MARGIN));
-        northPanel.setBackground(backgroundColour);
+        northPanel.setBackground(BACKGROUND_COLOUR);
 
         JPanel southPanel = new JPanel();
         southPanel.setPreferredSize(new Dimension(0, MARGIN));
-        southPanel.setBackground(backgroundColour);
+        southPanel.setBackground(BACKGROUND_COLOUR);
 
         // Adds north and south panels for spacing
         add(northPanel, BorderLayout.NORTH);

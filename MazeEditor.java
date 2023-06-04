@@ -85,7 +85,7 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         
         // Creates ButtonPanel by passing in the names, actions and states of the buttons
         // Also passes in the width of the panel, background colour and the ButtonUI
-        buttonPanel = new ButtonPanel(buttonNames, buttonActions, editorPanel.getWidth(), Color.ORANGE, ui);
+        buttonPanel = new ButtonPanel(buttonNames, buttonActions, editorPanel.getWidth(), ui);
 
         // Adds components and packs
         getContentPane().add(editorPanel);

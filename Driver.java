@@ -72,7 +72,7 @@ public class Driver extends JFrame implements PathFinderListener
 
         // Creates ButtonPanel by passing in the names, actions and states of the buttons
         // Also passes in the width of the panel, background colour and the ButtonUI
-        buttonPanel = new ButtonPanel(buttonNames, buttonActions, pathfinder.getWidth(), Color.ORANGE, ui);
+        buttonPanel = new ButtonPanel(buttonNames, buttonActions, pathfinder.getWidth(), ui);
 
         // Sets the default button configuration since timer is stopped by default
         // The event is null as it was called from this class

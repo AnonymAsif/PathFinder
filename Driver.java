@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 /**
  * Driver class for a Pathfinding AI
  * JFrame window for PathFinder panel
+ * Many methods take an ActionEvent, so they can be called by buttons
  *
  * @author Asif Rahman
  * @version 10/05/2023
@@ -45,8 +46,9 @@ public class Driver extends JFrame implements PathFinderListener
         // Creates a file handler for the maze
         MazeFileHandler fileHandler = new MazeFileHandler(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
 
-        // Initializes Pathfinder panel using the maze created from the fileHandler
+        // Initializes Pathfinder panel using the maze and ranger created in file handler
         pathfinder = new PathFinder(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, fileHandler.getMaze());
+        pathfinder.setStartIndex(fileHandler.getRangerIndex());
 
         // Creates a new maze editor
         editor = new MazeEditor(pathfinder, fileHandler);
@@ -114,6 +116,10 @@ public class Driver extends JFrame implements PathFinderListener
         JMenuItem saveFile = new JMenuItem("Save");
         JMenuItem loadFile = new JMenuItem("Load");
 
+        // Adds the actions to the buttons
+        saveFile.addActionListener(this::writeNewMaze);
+        loadFile.addActionListener(this::readNewMaze);
+
         // Adds the menu items to the File menu
         file.add(saveFile);
         file.add(loadFile);
@@ -121,6 +127,48 @@ public class Driver extends JFrame implements PathFinderListener
         // Adds Edit and File menus to menubar
         menubar.add(edit);
         menubar.add(file);
+    }
+
+    // Attempts to read a new maze from maze.txt and send it to the editor
+    private void readNewMaze(ActionEvent event) {
+        // Message in confirm dialog
+        String confirmMessage = "Are you sure you want to read a new maze from a file?\n" +
+                "Your current maze will be overwritten and lost if unsaved.";
+
+        // Asks user if they're sure
+        int choice = JOptionPane.showConfirmDialog(this,
+                confirmMessage, "Confirm Maze Loading", JOptionPane.YES_NO_CANCEL_OPTION);
+
+        // If the user did not agree, stop and let them know
+        if (choice != JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(this, "Maze load operation cancelled.");
+            return;
+        }
+
+        // Tries to read a maze since the user agreed
+        // Editor will handle the error message if it doesn't work
+        editor.readMazeFromFile();
+    }
+
+    // Attempts to write the current maze to maze.txt and save it
+    private void writeNewMaze(ActionEvent event) {
+        // Message in confirm dialog
+        String confirmMessage = "Are you sure you want to save the current maze to a file?\n" +
+                "The maze in the file will be overwritten and lost if unsaved.";
+
+        // Asks user if they're sure
+        int choice = JOptionPane.showConfirmDialog(this,
+                confirmMessage, "Confirm Maze Saving", JOptionPane.YES_NO_CANCEL_OPTION);
+
+        // If the user did not agree, stop and let them know
+        if (choice != JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(this, "Maze save operation cancelled.");
+            return;
+        }
+
+        // Tries to write the maze
+        // Editor will handle error messages if necessary
+        editor.saveMazeToFile();
     }
 
     // Takes an ActionEvent as this method should be called by a button

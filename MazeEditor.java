@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Maze editor class for a maze solver
@@ -136,6 +138,57 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         // Lets user know the operation has been cancelled
         JOptionPane.showMessageDialog(this, "Maze update cancelled.");
         return false;
+    }
+
+    // Method to read new maze in EditorPanel
+    public void readMazeFromFile() {
+        // Tries to read the maze from file handler
+        // If it works, apply it in the editorPanel and set visible to let the user know
+        try {
+            fileHandler.readMaze();
+
+            // Since the reading worked
+            // Set the maze, then the cabin and ranger indices in editorPanel
+            editorPanel.setMaze(fileHandler.getMaze());
+            editorPanel.setStartIndex(fileHandler.getRangerIndex());
+            editorPanel.setCabinIndex(fileHandler.getCabinIndex());
+
+
+            // Since a new maze was read, in the file handler, stop and reset the pathfinder
+            pathfinder.stop();
+            pathfinder.resetPathFinder();
+
+            // Set visible to let the user know that something changed in the editor
+            setVisible(true);
+        }
+
+        // If it didn't work, let the user know
+        catch (IOException e) {
+            JOptionPane.showMessageDialog(this, // Centers on panel
+                    "An error has occurred when reading the file: " + e.getMessage(), // Message in dialog
+                    "Error: "  + e.getMessage(), // Puts cause of error in title
+                    JOptionPane.ERROR_MESSAGE); // It is an error
+        }
+    }
+
+    // Method to save the maze in file handler to file
+    public void saveMazeToFile() {
+
+        // Attempts to save the maze to the file
+        try {
+            fileHandler.writeMaze();
+
+            // Lets user know if it worked
+            JOptionPane.showMessageDialog(this, "Maze save operation successful.");
+        }
+
+        // If it didn't work show an error message
+        catch (IOException e) {
+            JOptionPane.showMessageDialog(this, // Centers on panel
+                    "An error has occurred when writing to the file: " + e.getMessage(), // Message in dialog
+                    "Error: "  + e.getMessage(), // Puts cause of error in title
+                    JOptionPane.ERROR_MESSAGE); // It is an error
+        }
     }
 
     // Fired when the selection of the JList changes

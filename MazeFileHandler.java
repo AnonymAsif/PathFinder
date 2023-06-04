@@ -1,3 +1,4 @@
+import javax.swing.JOptionPane;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -75,11 +76,19 @@ public class MazeFileHandler
             readMaze();
         }
 
-        // Prints error message if it fails
+        // Shows user error message if it fails
         // Maze is then set to default maze
         catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Setting default maze...\n");
+            // Error message
+            String message = "An error has occurred when reading the file:\n" +
+                    e.getMessage() +
+                    "\nSetting default maze...";
+
+            JOptionPane.showMessageDialog(null, // Centers on screen
+                    message, // Message in dialog
+                    "Error: "  + e.getMessage(), // Puts cause of error in title
+                    JOptionPane.ERROR_MESSAGE); // It is an error message
+
 
             setDefaultMaze();
         }
@@ -113,29 +122,31 @@ public class MazeFileHandler
     
     // Reads maze from maze file
     public void readMaze() throws IOException {
-        // Scanner to read from file
-        Scanner scanner = new Scanner(new File(MAZE_FILE_PATH));
-        
         // ArrayList to hold every line read
         ArrayList<String> lines = new ArrayList<>();
-        
-        // While there are lines to read from the file
-        while (scanner.hasNextLine()) {
-            // Inputs the line
-            String line = scanner.nextLine();
-            
-            // If the line isn't the same length as the width, throw an exception
-            if (line.length() != mazeWidth) 
-                throw new IOException("Unexpected width of maze");
-            
-            
-            // Add the line to the ArrayList
-            lines.add(line);
+
+        // Scanner to read from file
+        // Try block to ensure scanner is closed
+        try(Scanner scanner = new Scanner(new File(MAZE_FILE_PATH))) {
+
+            // While there are lines to read from the file
+            while (scanner.hasNextLine()) {
+                // Inputs the line
+                String line = scanner.nextLine();
+
+                // If the line isn't the same length as the width, throw an exception
+                if (line.length() != mazeWidth)
+                    throw new IOException("Unexpected width of maze");
+
+                // Add the line to the ArrayList
+                lines.add(line);
+            }
         }
         
         // Verifies the length of the ArrayList is the expected height
         if (lines.size() != mazeHeight)
             throw new IOException("Unexpected height of maze");
+
         
         // Creates a new maze
         PathBlock[][] newMaze = new PathBlock[mazeHeight][mazeWidth];
@@ -150,66 +161,68 @@ public class MazeFileHandler
         for (int i = 0; i < mazeHeight; i++) {
             // Gets the current line
             String line = lines.get(i);
-            
+
             for (int j = 0; j < mazeWidth; j++) {
                 // Sets the PathBlock to the appropriate type based on character
                 PathBlock newBlock;
-                
+
                 // Character represents a tree, set it to a new tree
                 if (line.charAt(j) == MazeStates.TREE.getCode())
                     newBlock = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-                    
-                // Character represents a trail, make a new Trail
+
+                    // Character represents a trail, make a new Trail
                 else {
                     newBlock = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-                    
+
                     // It may be a cabin or ranger
                     // If it's a cabin, set the traversal state of the Trail to CABIN
-                    if (line.charAt(j) == MazeStates.CABIN.getCode()){
+                    if (line.charAt(j) == MazeStates.CABIN.getCode()) {
                         // If foundCabin is already true, there is another cabin
                         if (newCabinIndex != null)
                             throw new IOException("Cannot have multiple cabins");
-                        
+
                         // Sets block as cabin and marks a cabin as found
                         // j is the x, and i is the y
-                        ((Trail)newBlock).setTraversalState(Trail.TraversalState.CABIN);
+                        ((Trail) newBlock).setTraversalState(Trail.TraversalState.CABIN);
                         newCabinIndex = new MazePanel.Coordinate2D(j, i);
                     }
-                        
+
                     // If it's a ranger, set the ranger index
                     else if (line.charAt(j) == MazeStates.RANGER.getCode()) {
-                        
+
                         // If ranger index isn't null, then another ranger is in the maze
-                        if (newRangerIndex != null) 
+                        if (newRangerIndex != null)
                             throw new IOException("Cannot have multiple rangers");
-                        
+
                         newRangerIndex = new MazePanel.Coordinate2D(j, i);
                     }
 
+                    // The character should be an empty Trail then
                     // If the character is something else, throw an exception
-                    else throw new IOException("Invalid character found.");
+                    else if (line.charAt(j) != MazeStates.TRAIL.getCode())
+                        throw new IOException("Invalid character found.");
                 }
-                
+
                 // Sets the new PathBlock in the new maze
                 newMaze[i][j] = newBlock;
             }
+        }
             
             // New maze is fully initialized
             // If a ranger or cabin was not found, the maze is invalid
             if (newRangerIndex == null || newCabinIndex == null)
-                throw new IOException("Maze did not have a ranger and cabin");
+                throw new IOException("Maze did not have a ranger and cabin.");
                 
             // Saves new maze and indices
             maze = newMaze;
             rangerIndex = newRangerIndex;
             cabinIndex = newCabinIndex;
-        }
-            
     }
     
     // Writes maze to maze file
-    public void writeMaze() throws FileNotFoundException {
+    public void writeMaze() throws IOException {
         // PrintWriter to write to file
+        // Try block to ensure it is closed
         try (PrintWriter writer = new PrintWriter(MAZE_FILE_PATH)) {
             // For each block in each row
             for (int i = 0; i < mazeHeight; i++) {
@@ -244,6 +257,10 @@ public class MazeFileHandler
                 // Skip a line after each row
                 writer.println();
             }
+
+            // Throws an IOException if the writer had errors
+            if (writer.checkError())
+                throw new IOException("An unexpected error has occurred while writing to the file.");
         }
     }
 

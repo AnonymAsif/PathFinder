@@ -1,3 +1,4 @@
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -28,6 +29,9 @@ public class PathFinder extends MazePanel implements ActionListener
     // Contains Coordinate2D for location in maze
     private final Stack<Coordinate2D> traversalStack;
 
+    // The default direction of the ranger is south
+    private final Directions DEFAULT_DIRECTION = Directions.SOUTH;
+
     // Direction that the Ranger is currently facing
     private Directions currentDirection;
     
@@ -44,42 +48,12 @@ public class PathFinder extends MazePanel implements ActionListener
 
         // Initializes stack of indices
         traversalStack = new Stack<>();
-        
-//        int[][] trees = {
-//            {0,0,0,0,0,0,0,0,0,0,0,1},
-//            {1,0,1,1,1,1,1,1,1,1,0,1},
-//            {1,0,0,0,0,1,0,0,0,1,0,1},
-//            {0,0,1,1,0,1,0,1,0,0,0,1},
-//            {0,1,1,0,0,1,0,1,0,1,1,1},
-//            {0,1,0,0,0,1,0,0,0,0,0,1},
-//            {0,1,1,0,1,1,1,1,1,0,0,1},
-//            {0,0,1,0,1,0,1,0,1,0,1,1},
-//            {1,1,1,0,1,0,0,0,1,0,1,1},
-//            {0,0,0,0,1,0,1,0,0,0,1,1},
-//            {1,0,1,0,1,1,1,1,0,1,1,1},
-//            {1,1,1,0,0,0,2,1,0,0,0,0}
-//        };
-//
-//        // Initializes each block
-//        // Every Block is a Trail by default until set otherwise
-//        // Multiplies by dimensions for no spacing between blocks
-//        for (int i = 0; i < mazeHeight; i++)
-//            for (int j = 0; j < mazeWidth; j++) {
-//                if (trees[i][j] == 1)
-//                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-//                else {
-//                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-//
-//                    if (trees[i][j] == 2)
-//                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
-//                }
-//            }
 
         // Adds the rangers starting index to the Stack
         traversalStack.push(startIndex);
 
-        // Facing south to start purely for design
-        currentDirection = Directions.SOUTH;
+        // Facing default direction to start purely for design
+        currentDirection = DEFAULT_DIRECTION;
 
         // Initializes the EnumMap if it is null
         if (stateDirections == null) {
@@ -226,6 +200,9 @@ public class PathFinder extends MazePanel implements ActionListener
         // Updates the stack to contain only the new index
         traversalStack.clear();
         traversalStack.push(startIndex);
+
+        // Makes sure the ranger faces default direction when reset
+        currentDirection = DEFAULT_DIRECTION;
 
         // Repaints to show updates
         repaint();

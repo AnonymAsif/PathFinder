@@ -38,42 +38,42 @@ public class PathFinder extends MazePanel implements ActionListener
     private final ArrayList<PathFinderListener> listeners;
     
     // Constructor
-    public PathFinder(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
+    public PathFinder(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth, PathBlock[][] maze) {
         // Calls MazePanel constructor
-        super(mazeHeight, mazeWidth, panelHeight, panelWidth);
+        super(mazeHeight, mazeWidth, panelHeight, panelWidth, maze);
 
         // Initializes stack of indices
         traversalStack = new Stack<>();
         
-        int[][] trees = {
-            {0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,1,1,1,1,1,1,1,0,1},
-            {1,0,0,0,0,1,0,0,0,1,0,1},
-            {0,0,1,1,0,1,0,1,0,0,0,1},
-            {0,1,1,0,0,1,0,1,0,1,1,1},
-            {0,1,0,0,0,1,0,0,0,0,0,1},
-            {0,1,1,0,1,1,1,1,1,0,0,1},
-            {0,0,1,0,1,0,1,0,1,0,1,1},
-            {1,1,1,0,1,0,0,0,1,0,1,1},
-            {0,0,0,0,1,0,1,0,0,0,1,1},
-            {1,0,1,0,1,1,1,1,0,1,1,1},
-            {1,1,1,0,0,0,2,1,0,0,0,0}
-        };
-
-        // Initializes each block
-        // Every Block is a Trail by default until set otherwise
-        // Multiplies by dimensions for no spacing between blocks
-        for (int i = 0; i < mazeHeight; i++)
-            for (int j = 0; j < mazeWidth; j++) {
-                if (trees[i][j] == 1)
-                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-                else {
-                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-
-                    if (trees[i][j] == 2)
-                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
-                }
-            }
+//        int[][] trees = {
+//            {0,0,0,0,0,0,0,0,0,0,0,1},
+//            {1,0,1,1,1,1,1,1,1,1,0,1},
+//            {1,0,0,0,0,1,0,0,0,1,0,1},
+//            {0,0,1,1,0,1,0,1,0,0,0,1},
+//            {0,1,1,0,0,1,0,1,0,1,1,1},
+//            {0,1,0,0,0,1,0,0,0,0,0,1},
+//            {0,1,1,0,1,1,1,1,1,0,0,1},
+//            {0,0,1,0,1,0,1,0,1,0,1,1},
+//            {1,1,1,0,1,0,0,0,1,0,1,1},
+//            {0,0,0,0,1,0,1,0,0,0,1,1},
+//            {1,0,1,0,1,1,1,1,0,1,1,1},
+//            {1,1,1,0,0,0,2,1,0,0,0,0}
+//        };
+//
+//        // Initializes each block
+//        // Every Block is a Trail by default until set otherwise
+//        // Multiplies by dimensions for no spacing between blocks
+//        for (int i = 0; i < mazeHeight; i++)
+//            for (int j = 0; j < mazeWidth; j++) {
+//                if (trees[i][j] == 1)
+//                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
+//                else {
+//                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
+//
+//                    if (trees[i][j] == 2)
+//                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
+//                }
+//            }
 
         // Adds the rangers starting index to the Stack
         traversalStack.push(startIndex);
@@ -242,50 +242,15 @@ public class PathFinder extends MazePanel implements ActionListener
     // Resets the PathFinder by resetting the maze, ranger and current direction and
     // Fires a reset event
     public void resetPathFinder() {
-        // Adds the ranger's starting location to the stack
-        traversalStack.push(startIndex);
-
-        int[][] trees = {
-                {0,0,0,0,0,0,0,0,0,0,0,1},
-                {1,0,1,1,1,1,1,1,1,1,0,1},
-                {1,0,0,0,0,1,0,0,0,1,0,1},
-                {0,0,1,1,0,1,0,1,0,0,0,1},
-                {0,1,1,0,0,1,0,1,0,1,1,1},
-                {0,1,0,0,0,1,0,0,0,0,0,1},
-                {0,1,1,0,1,1,1,1,1,0,0,1},
-                {0,0,1,0,1,0,1,0,1,0,1,1},
-                {1,1,1,0,1,0,0,0,1,0,1,1},
-                {0,0,0,0,1,0,1,0,0,0,1,1},
-                {1,0,1,0,1,1,1,1,0,1,1,1},
-                {1,1,1,0,0,0,0,1,0,0,0,0}
-        };
-
-        // Initializes each block
-        // Every Block is a Trail by default until set otherwise
-        // Multiplies by dimensions for no spacing between blocks
-        for (int i = 0; i < mazeHeight; i++)
-            for (int j = 0; j < mazeWidth; j++) {
-                if (trees[i][j] == 1)
-                    maze[i][j] = new Tree(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-                else {
-                    maze[i][j] = new Trail(j * blockWidth, i * blockHeight, blockWidth, blockHeight);
-
-                    if (trees[i][j] == 2)
-                        ((Trail)maze[i][j]).setTraversalState(Trail.TraversalState.CABIN);
-                }
-            }
-
-        // Facing south to start purely for appearance
-        currentDirection = Directions.SOUTH;
-
         // Resets the state of the Ranger
         ranger.resetSuccess();
 
+        // Fires a reset event,
+        // Event listeners should set the new maze
+        fireReset();
+
         // Redraws the reset PathFinder panel
         repaint();
-
-        // Fires a reset event
-        fireReset();
     }
 
     // Starts timer and fires timerStarted

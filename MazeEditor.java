@@ -33,10 +33,16 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     // JList of icons for the user to choose when editing
     private final JList<Icon> iconList;
 
+    // File handler to save and load mazes to solve
+    private final MazeFileHandler fileHandler;
+
     // Constructor
-    public MazeEditor(PathFinder pathfinder) {
+    public MazeEditor(PathFinder pathfinder, MazeFileHandler fileHandler) {
         // Saves PathFinder
         this.pathfinder = pathfinder;
+
+        // Creates new file handler
+        this.fileHandler = fileHandler;
 
         // Sets up frame
         setTitle("Maze Editor");
@@ -45,9 +51,13 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         // Sets editor as a modal window
         setModalityType(ModalityType.APPLICATION_MODAL);
         
-        // Initializes editor panel using dimensions from pathfinder
+        // Initializes editor panel using dimensions from pathfinder and maze from file handler
         editorPanel = new EditorPanel(pathfinder.getMazeHeight(), pathfinder.getMazeWidth(),
-                pathfinder.getPanelHeight(), pathfinder.getPanelWidth());
+                pathfinder.getPanelHeight(), pathfinder.getPanelWidth(), fileHandler.getMaze());
+
+        // Sets cabin and ranger indices in editorPanel using the file handler
+        editorPanel.setCabinIndex(fileHandler.getCabinIndex());
+        editorPanel.setStartIndex(fileHandler.getRangerIndex());
 
         // Gets an array of icons from the EditorStates enum
         ImageIcon[] editorIcons = EditorPanel.EditorStates.getDrawableBlockIcons();
@@ -82,7 +92,8 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     }
 
     // Applies new maze by setting it in pathfinder
-    private void applyMaze() {
+    // Returns boolean of if the maze was applied
+    public boolean applyMaze() {
         // Makes sure editorPanel has a valid maze
         // Lets user know and returns if it isn't
         if (!editorPanel.isMazeValid()) {
@@ -91,7 +102,7 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
                             "Please ensure that a ranger and cabin have been placed.", // Dialog message
                     "Invalid Message", // Title of Dialog box
                     JOptionPane.ERROR_MESSAGE); // Warning message
-            return;
+            return false;
         }
 
         // Double checks that the user wants to apply the maze
@@ -100,18 +111,31 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         // If the user chooses yes, apply the maze
         // Otherwise do nothing
         if (choice == JOptionPane.YES_OPTION) {
-            // Gets the maze from editorPanel and sets it in pathfinder
-            pathfinder.setMaze(editorPanel.getMaze());
+            // Gives the maze created by editorPanel to the file handler
+            fileHandler.setMaze(editorPanel.getMaze());
 
-            // Gets the start index from editorPanel and sets it in pathfinder
-            pathfinder.setStartIndex(editorPanel.getStartIndex());
+            // Sets the ranger index in file handler, since the maze changed
+            fileHandler.setRangerIndex(editorPanel.getStartIndex());
+
+            // Stops the timer in pathfinder if it is currently running
+            pathfinder.stop();
+
+            // Gets a copy of the maze from fileHandler and sets it in pathFinder
+            pathfinder.setMaze(fileHandler.getMaze());
+
+            // Gets the ranger index from fileHandler and sets it in pathfinder
+            pathfinder.setStartIndex(fileHandler.getRangerIndex());
 
             // Lets user know pathfinder has been updated
             JOptionPane.showMessageDialog(this, "Maze updated in pathfinder.");
+
+            // The maze was updated
+            return true;
         }
 
         // Lets user know the operation has been cancelled
-        else JOptionPane.showMessageDialog(this, "Maze update cancelled.");
+        JOptionPane.showMessageDialog(this, "Maze update cancelled.");
+        return false;
     }
 
     // Fired when the selection of the JList changes
@@ -122,5 +146,10 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         
         // Updates the icon in editor panel
         editorPanel.setCurrentIcon(index);
+    }
+
+    // Getter for the file handler
+    public MazeFileHandler getFileHandler() {
+        return fileHandler;
     }
 }

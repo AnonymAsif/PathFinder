@@ -28,6 +28,7 @@ public class Driver extends JFrame implements PathFinderListener
     // Editor that can create and edit mazes
     private final MazeEditor editor;
 
+
     // Dimensions of the maze
     private static final int MAZE_HEIGHT = 12;
     private static final int MAZE_WIDTH = 12;
@@ -40,9 +41,15 @@ public class Driver extends JFrame implements PathFinderListener
         // Sets up frame for the game
         setTitle("Maze Pathfinder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Initializes Pathfinder panel
-        pathfinder = new PathFinder(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
+
+        // Creates a file handler for the maze
+        MazeFileHandler fileHandler = new MazeFileHandler(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH);
+
+        // Initializes Pathfinder panel using the maze created from the fileHandler
+        pathfinder = new PathFinder(MAZE_HEIGHT, MAZE_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, fileHandler.getMaze());
+
+        // Creates a new maze editor
+        editor = new MazeEditor(pathfinder, fileHandler);
 
         // Adds this as a PathFinderListener to pathfinder
         pathfinder.addPathFinderListener(this);
@@ -68,9 +75,6 @@ public class Driver extends JFrame implements PathFinderListener
         // Initializes menubar and sets it up
         menubar = new JMenuBar();
         setupMenuBar();
-
-        // Creates a new maze editor
-        editor = new MazeEditor(pathfinder);
 
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);
@@ -191,16 +195,23 @@ public class Driver extends JFrame implements PathFinderListener
         });
     }
 
-    // Frame skipped, leave button configuration unchanged
-    @Override
-    public void frameSkipped(PathFinderEvent e) {}
-
-
     // The PathFinder reset itself, reset the button configuration to default
-    // The timer is stopped by default, so call timerStopped instead
+    // The timer is stopped by default, so call timerStopped
+    // Gets maze from file handler and resets the one in pathfinder
     @Override
     public void reset(PathFinderEvent e) {
+        // Gets the file handler from the editor
+        MazeFileHandler fileHandler = editor.getFileHandler();
+
+        // Sets the maze and ranger index in pathfinder to the original one in fileHandler
+        pathfinder.setMaze(fileHandler.getMaze());
+        pathfinder.setStartIndex(fileHandler.getRangerIndex());
+
+        // Sets button configuration
         timerStopped(e);
     }
 
+    // Frame skipped, leave button configuration unchanged
+    @Override
+    public void frameSkipped(PathFinderEvent e) {}
 }

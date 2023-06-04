@@ -59,7 +59,7 @@ public abstract class MazePanel extends JPanel {
     protected PathBlock[][] maze;
 
 
-    public MazePanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
+    public MazePanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth, PathBlock[][] maze) {
         // Sets maze and panel dimensions
         this.mazeHeight = mazeHeight;
         this.mazeWidth = mazeWidth;
@@ -74,8 +74,8 @@ public abstract class MazePanel extends JPanel {
         ranger = new Ranger();
         startIndex = new Coordinate2D(0, 0);
 
-        // Creates new maze
-        maze = new PathBlock[mazeHeight][mazeWidth];
+        // Saves maze
+        this.maze = maze;
         
         // sets preferred size
         setPreferredSize(new Dimension(panelWidth, panelHeight));

@@ -55,12 +55,9 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
     // There should not be more than one cabin
     private Coordinate2D cabinIndex = null;
 
-    public EditorPanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth) {
+    public EditorPanel(int mazeHeight, int mazeWidth, int panelHeight, int panelWidth, PathBlock[][] maze) {
         // Calls MazePanel constructor
-        super(mazeHeight, mazeWidth, panelHeight, panelWidth);
-    
-        // Clear method will set up all PathBlock objects to default
-        clear();
+        super(mazeHeight, mazeWidth, panelHeight, panelWidth, maze);
         
         // Adds this class as a mouse and mouse motion listener
         addMouseListener(this);
@@ -171,6 +168,11 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         // Maze is valid if there is a cabin and a ranger
         // Trees do not affect maze validity
         return startIndex != null && cabinIndex != null;
+    }
+
+    // Setter for the cabin index
+    public void setCabinIndex(Coordinate2D cabinIndex) {
+        this.cabinIndex = cabinIndex;
     }
         
     

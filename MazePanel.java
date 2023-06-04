@@ -137,6 +137,9 @@ public abstract class MazePanel extends JPanel {
         // Sets maze
         this.maze = maze;
 
+        // Resets ranger since a new maze was applied
+        ranger.resetSuccess();
+
         // Repaints since maze has been updated
         repaint();
     }

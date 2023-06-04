@@ -247,8 +247,13 @@ public class MazeFileHandler
         }
     }
 
-    // Getter that returns a deep copy of the maze
-    public PathBlock[][] getMaze() {
+    // Creates a deep copy of a maze and returns it
+    private PathBlock[][] getMazeCopy(PathBlock[][] oldMaze) {
+        // Throws exception if the oldMaze is null
+        if (oldMaze == null)
+            throw new IllegalArgumentException("Old maze cannot be null");
+
+        // New maze to be copied into
         PathBlock[][] copy = new PathBlock[mazeHeight][mazeWidth];
 
         // For every element in the current maze
@@ -257,7 +262,7 @@ public class MazeFileHandler
         for (int i = 0; i < mazeHeight; i++) {
             for (int j = 0; j < mazeWidth; j++) {
                 // Old PathBlock to be copied
-                PathBlock old = maze[i][j];
+                PathBlock old = oldMaze[i][j];
 
                 // If it was a Tree, create a new Tree
                 // using the old Trees dimensions and continue
@@ -276,6 +281,21 @@ public class MazeFileHandler
         return copy;
     }
 
+    // Getter that returns a deep copy of the maze
+    public PathBlock[][] getMaze() {
+        return getMazeCopy(maze);
+    }
+
+    // Setter that saves a deep copy of a maze
+    public void setMaze(PathBlock[][] maze) {
+        // Throws exception if maze is null
+        if (maze == null)
+            throw new IllegalArgumentException("Null maze");
+
+        // Saves a copy of the maze
+        this.maze = getMazeCopy(maze);
+    }
+
     // Getters and setters for ranger and cabin index
     public MazePanel.Coordinate2D getRangerIndex() {
         return rangerIndex;
@@ -287,10 +307,5 @@ public class MazeFileHandler
 
     public void setRangerIndex(MazePanel.Coordinate2D rangerIndex) {
         this.rangerIndex = rangerIndex;
-    }
-
-    // Setter for the maze
-    public void setMaze(PathBlock[][] maze) {
-        this.maze = maze;
     }
 }

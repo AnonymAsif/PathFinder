@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -84,6 +85,9 @@ public class Driver extends JFrame implements PathFinderListener
 
         // Initializes file chooser
         fileChooser = new JFileChooser();
+
+        // Sets the Icon Image to the Tree image
+        setIconImage(new ImageIcon(Tree.getImagePath()).getImage());
 
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);

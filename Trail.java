@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Trail is a PathBlock

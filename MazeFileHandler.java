@@ -1,8 +1,5 @@
-import javax.swing.JOptionPane;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -159,7 +156,7 @@ public class MazeFileHandler
                             throw new IOException("Cannot have multiple cabins");
 
                         // Sets block as cabin and marks a cabin as found
-                        // j is the x, and i is the y
+                        // j is the x, and i the y
                         ((Trail) newBlock).setTraversalState(Trail.TraversalState.CABIN);
                         newCabinIndex = new MazePanel.Coordinate2D(j, i);
                     }

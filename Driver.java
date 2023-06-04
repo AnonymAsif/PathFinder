@@ -1,3 +1,4 @@
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -6,6 +7,7 @@ import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 /**
  * Driver class for a Pathfinding AI
@@ -29,6 +31,8 @@ public class Driver extends JFrame implements PathFinderListener
     // Editor that can create and edit mazes
     private final MazeEditor editor;
 
+    // File chooser for loading and saving mazes
+    private final JFileChooser fileChooser;
 
     // Dimensions of the maze
     private static final int MAZE_HEIGHT = 12;
@@ -77,6 +81,9 @@ public class Driver extends JFrame implements PathFinderListener
         // Initializes menubar and sets it up
         menubar = new JMenuBar();
         setupMenuBar();
+
+        // Initializes file chooser
+        fileChooser = new JFileChooser();
 
         // Adds JPanels and menubar to frame and packs it
         getContentPane().add(pathfinder);
@@ -145,9 +152,19 @@ public class Driver extends JFrame implements PathFinderListener
             return;
         }
 
+        // Lets the user choose a file to read
+        fileChooser.setDialogTitle("Select a Maze File to Read");
+        choice = fileChooser.showOpenDialog(this);
+
+        // If the user did not choose a file, return
+        if (choice != JFileChooser.APPROVE_OPTION) return;
+
+        // Gets File that the user chose
+        File chosenFile = fileChooser.getSelectedFile();
+
         // Tries to read a maze since the user agreed
         // Editor will handle the error message if it doesn't work
-        editor.readMazeFromFile();
+        editor.readMazeFromFile(chosenFile);
     }
 
     // Attempts to write the current maze to maze.txt and save it
@@ -166,9 +183,19 @@ public class Driver extends JFrame implements PathFinderListener
             return;
         }
 
+        // Lets the user choose a file to save to
+        fileChooser.setDialogTitle("Select a File to Save Maze");
+        choice = fileChooser.showOpenDialog(this);
+
+        // If the user did not choose a file, return
+        if (choice != JFileChooser.APPROVE_OPTION) return;
+
+        // Gets File that the user chose
+        File chosenFile = fileChooser.getSelectedFile();
+
         // Tries to write the maze
         // Editor will handle error messages if necessary
-        editor.saveMazeToFile();
+        editor.saveMazeToFile(chosenFile);
     }
 
     // Takes an ActionEvent as this method should be called by a button

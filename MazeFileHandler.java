@@ -38,9 +38,6 @@ public class MazeFileHandler
             return CODE;
         }
     }
-
-    // File where the maze is written to
-    private final String MAZE_FILE_PATH = "maze.txt";
     
     // Maze to parse, read and write from/to file
     private PathBlock[][] maze;
@@ -70,28 +67,8 @@ public class MazeFileHandler
         blockHeight = panelHeight / mazeHeight;
         blockWidth = panelWidth / mazeWidth;
 
-
-        // Attempts to read a maze from the maze file
-        try {
-            readMaze();
-        }
-
-        // Shows user error message if it fails
-        // Maze is then set to default maze
-        catch (IOException e) {
-            // Error message
-            String message = "An error has occurred when reading the file:\n" +
-                    e.getMessage() +
-                    "\nSetting default maze...";
-
-            JOptionPane.showMessageDialog(null, // Centers on screen
-                    message, // Message in dialog
-                    "Error: "  + e.getMessage(), // Puts cause of error in title
-                    JOptionPane.ERROR_MESSAGE); // It is an error message
-
-
-            setDefaultMaze();
-        }
+        // Sets default maze
+        setDefaultMaze();
     }
 
     // Sets the maze to the "default maze"
@@ -121,13 +98,13 @@ public class MazeFileHandler
     }
     
     // Reads maze from maze file
-    public void readMaze() throws IOException {
+    public void readMaze(File mazeFile) throws IOException {
         // ArrayList to hold every line read
         ArrayList<String> lines = new ArrayList<>();
 
         // Scanner to read from file
         // Try block to ensure scanner is closed
-        try(Scanner scanner = new Scanner(new File(MAZE_FILE_PATH))) {
+        try(Scanner scanner = new Scanner(mazeFile)) {
 
             // While there are lines to read from the file
             while (scanner.hasNextLine()) {
@@ -220,10 +197,10 @@ public class MazeFileHandler
     }
     
     // Writes maze to maze file
-    public void writeMaze() throws IOException {
+    public void writeMaze(File mazeFile) throws IOException {
         // PrintWriter to write to file
         // Try block to ensure it is closed
-        try (PrintWriter writer = new PrintWriter(MAZE_FILE_PATH)) {
+        try (PrintWriter writer = new PrintWriter(mazeFile)) {
             // For each block in each row
             for (int i = 0; i < mazeHeight; i++) {
                 for (int j = 0; j < mazeWidth; j++) {

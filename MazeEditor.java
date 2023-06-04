@@ -10,6 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -141,11 +142,11 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     }
 
     // Method to read new maze in EditorPanel
-    public void readMazeFromFile() {
+    public void readMazeFromFile(File mazeFile) {
         // Tries to read the maze from file handler
         // If it works, apply it in the editorPanel and set visible to let the user know
         try {
-            fileHandler.readMaze();
+            fileHandler.readMaze(mazeFile);
 
             // Since the reading worked
             // Set the maze, then the cabin and ranger indices in editorPanel
@@ -172,11 +173,11 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
     }
 
     // Method to save the maze in file handler to file
-    public void saveMazeToFile() {
+    public void saveMazeToFile(File mazeFile) {
 
         // Attempts to save the maze to the file
         try {
-            fileHandler.writeMaze();
+            fileHandler.writeMaze(mazeFile);
 
             // Lets user know if it worked
             JOptionPane.showMessageDialog(this, "Maze save operation successful.");

@@ -144,7 +144,7 @@ public abstract class MazePanel extends JPanel {
         repaint();
     }
 
-    /* Setter and Getter methods for maze */
+    /* Setter and Getter methods for ranger index */
     public Coordinate2D getStartIndex() {
         return startIndex;
     }

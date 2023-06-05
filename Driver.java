@@ -13,6 +13,9 @@ import java.io.File;
 /**
  * Driver class for a Pathfinding AI
  * JFrame window for PathFinder panel
+ * Sets up editor and pathfinder
+ * Contains file chooser and menubar
+ * Listens to PathFinder events and makes changes in pathfinder
  * Many methods take an ActionEvent, so they can be called by buttons
  *
  * @author Asif Rahman

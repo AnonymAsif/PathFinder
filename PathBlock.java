@@ -6,7 +6,8 @@ import javax.swing.ImageIcon;
 
 /**
  * Block class for a maze solver or pathfinder
- * Each block can be in a variety of states
+ * Each block has ana image icon and default colour to represent it
+ * Abstract class that mainly provides drawing tools
  *
  * @author Asif Rahman
  * @version 08/05/2023

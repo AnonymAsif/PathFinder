@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Reads and writes Mazes to files
  * Mazes include trails, trees, location of the ranger and cabin
- * 
+ * Getters and setters create deep copies so that file handler is unaffected by other classes
  *
  * @author Asif Rahman
  * @version 01/06/2023
@@ -26,6 +26,7 @@ public class MazeFileHandler
         // Code that represents this state in file
         private final char CODE;
 
+        // Saves code in constructor
         MazeStates(char code) {
             CODE = code;
         }
@@ -40,12 +41,12 @@ public class MazeFileHandler
     private PathBlock[][] maze;
     
     // Dimensions of the maze
-    private int mazeHeight;
-    private int mazeWidth;
+    private final int mazeHeight;
+    private final int mazeWidth;
     
     // Dimensions of each block
-    private int blockHeight;
-    private int blockWidth;
+    private final int blockHeight;
+    private final int blockWidth;
 
     // The index of the ranger
     private MazePanel.Coordinate2D rangerIndex;
@@ -120,7 +121,6 @@ public class MazeFileHandler
         // Verifies the length of the ArrayList is the expected height
         if (lines.size() != mazeHeight)
             throw new IOException("Unexpected height of maze");
-
         
         // Creates a new maze
         PathBlock[][] newMaze = new PathBlock[mazeHeight][mazeWidth];

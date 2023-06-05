@@ -51,7 +51,7 @@ public class Ranger
         // The ranger is always TRAVERSING by default
         currentState = RangerStates.TRAVERSING;
 
-        // For every single direction
+        // For every single direction, get the corresponding image file path
         for (PathFinder.Directions direction : PathFinder.Directions.values()) {
             String imagePath = "Ranger/" + direction.toString().toLowerCase() + ".png";
 
@@ -123,16 +123,6 @@ public class Ranger
     // Resets the success state of the Ranger by setting it to TRAVERSING
     public void resetSuccess() {
         currentState = RangerStates.TRAVERSING;
-    }
-    
-    // Returns the image associated with the direction
-    public ImageIcon getIcon(MazePanel.Directions direction) {
-        return images.get(direction);
-    }
-    
-    // Returns the default colour of the Ranger
-    public Color getDefaultColour() {
-        return defaultColour;
     }
 
     // static method returning the "Default" image

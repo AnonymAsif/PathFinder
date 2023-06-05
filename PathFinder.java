@@ -11,7 +11,8 @@ import java.awt.event.ActionEvent;
  * Uses Depth First Search 
  * 
  * Animates a ranger finding a cabin using a swing timer
- * Keeps track of position and uses a stack for DFS
+ * Keeps track of position and uses a stack of Coordinate2D for DFS
+ *
  *
  * @author Asif Rahman
  * @version 09/05/2023
@@ -19,7 +20,7 @@ import java.awt.event.ActionEvent;
 public class PathFinder extends MazePanel implements ActionListener
 {
     // Number of ms between timer events
-    private static int updateTime = 75;
+    private static int updateTime = 250;
 
     // Maps traversal states to the direction of movement
     private static EnumMap<Trail.TraversalState, Directions> stateDirections = null;
@@ -58,7 +59,7 @@ public class PathFinder extends MazePanel implements ActionListener
         if (stateDirections == null) {
             stateDirections = new EnumMap<>(Trail.TraversalState.class);
 
-            // Adds 4 directions
+            // Adds 4 directions mapped to traversal states
             stateDirections.put(Trail.TraversalState.DISCOVERED_N, Directions.NORTH);
             stateDirections.put(Trail.TraversalState.DISCOVERED_E, Directions.EAST);
             stateDirections.put(Trail.TraversalState.DISCOVERED_S, Directions.SOUTH);
@@ -282,9 +283,9 @@ public class PathFinder extends MazePanel implements ActionListener
 
         // If a path was found, fire the pathFound event
         // Otherwise fire the noPathFound event
-        if (pathFound) {
+        if (pathFound)
             firePathFound();
-        }
+
         else fireNoPathFound();
     }
 

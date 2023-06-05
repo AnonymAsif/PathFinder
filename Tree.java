@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 import java.awt.Color;
 
 /**
@@ -23,16 +22,6 @@ public class Tree extends PathBlock
 
         // Updates the icon of this Tree to the tree image and colour
         updateIcon(IMAGE_PATH, treeColour);
-    }
-
-    // Returns ImageIcon
-    public ImageIcon getIcon() {
-        return icon;
-    }
-
-    // Returns default Color used when icon is not valid
-    public Color getDefaultColour() {
-        return treeColour;
     }
 
     // Static method returning the imagePath

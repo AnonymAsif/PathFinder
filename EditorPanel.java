@@ -116,14 +116,14 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
 
         // Places the correct icon on the square based on currentIcon
          switch (currentIcon) {
-             case TREE -> {
+             case TREE ->
                  // Makes the block a Tree
                  maze[y][x] = new Tree(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-             }
-             case RANGER -> {
+
+             case RANGER ->
                  // Updates start index of ranger
                  startIndex = new Coordinate2D(x, y);
-             }
+
              case CABIN -> {
                  // If there is another cabin, cabinIndex is not null
                  // remove that cabin and change the cabinIndex to this index
@@ -151,7 +151,8 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         // Sets start index and cabin index to null
         startIndex = null;
         cabinIndex = null;
-        
+
+        // Replace everything with an empty Trail object
         for (int i = 0; i < mazeHeight; i++) {
             for (int j = 0; j < mazeWidth; j++) {
                 // Trail is a subclass of Rectangle, so pass in coordinates and dimensions
@@ -182,7 +183,6 @@ public class EditorPanel extends MazePanel implements MouseListener, MouseMotion
         mousePressed(e);
     }
 
-    
     @Override
     public void mouseClicked(MouseEvent e) {}
 

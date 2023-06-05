@@ -17,6 +17,7 @@ import java.io.IOException;
  * Maze editor class for a maze solver
  * JDialog window created on top of main panel
  * Implements ListSelectionListener to listen to changes in JList
+ * Contains editor JPanel and file handler for maze updates
  *
  * @author Asif Rahman
  * @version 28/05/2023
@@ -76,14 +77,14 @@ public class MazeEditor extends JDialog implements ListSelectionListener {
         WorldsBestButtonUI ui = new WorldsBestButtonUI(Color.LIGHT_GRAY, Color.BLACK);
         
         // There will be two buttons, Clear and Apply
-        // Each button has a name and an action corresponding to a public method in pathfinder
+        // Each button has a name and an action corresponding to a method in this or editorPanel
         String[] buttonNames = new String[] {"Clear", "Apply"};
         ButtonAction[] buttonActions = new ButtonAction[] {
           editorPanel::clear, this::applyMaze
         };
         
         // Creates ButtonPanel by passing in the names, actions and states of the buttons
-        // Also passes in the width of the panel, background colour and the ButtonUI
+        // Also passes in the width of the panel and the ButtonUI
         buttonPanel = new ButtonPanel(buttonNames, buttonActions, editorPanel.getWidth(), ui);
 
         // Adds components and packs

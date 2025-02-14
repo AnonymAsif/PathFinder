@@ -1,7 +1,7 @@
 Pathfinder - A GUI Maze Builder and Solver (ICS4U Project)
 ==========================================
 <!-- Insert a gif here -->
-<img src="photos/solving.gif" alt="Maze Solving Animation" width="65%">
+<img src="photos/solving.gif" alt="Maze Solving Animation" width="60%">
 
 Ranger Rick got lost in the woods and needs to look for his cabin!
 Luckily, he has a great memory and can remember the paths he takes.

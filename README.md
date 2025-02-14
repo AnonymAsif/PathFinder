@@ -8,16 +8,16 @@ Build a maze with trees and watch as he searches (DFS) for his home!
 
 Editor
 ------
-To open the editor, use the menubar: Edit > Maze
-![Editor image](photos/editor_empty.png "Editor")
+To open the editor, use the menubar: Edit > Maze<br>
+<img src="photos/editor_empty.png" alt="Editor image" width="50%"/><br>
 From here, build any maze you would like! 
 It does not have to be solvable, but Ranger Rick will be sad if he cannot find his home.
 Note that:
 - Right-clicking and double-clicking function as left-clicks
 - Only one cabin and Ranger can be placed at a time - they will move
 
-Once your maze is complete:
-![Editor Done](photos/editor_done.png "Editor Done")
+Once your maze is complete:<br>
+<img src="photos/editor_done.png" alt="Editor Done" width="50%"/><br>
 Press "Apply" to send it to the maze solver.
 This will overwrite the maze currently in the maze solver. 
 Export any old mazes you wish to keep before pressing Apply.
@@ -30,12 +30,12 @@ There are four buttons in the lower panel of the solver:
 - Skip - Skips one step or tick (Ranger turns or walks)
 - Reset - Returns to unsolved state
 
-The speed at which the Ranger moves can be adjusted from Edit > Speed.
-![Speed Adjustment Window](photos/timer_delay.png "Timer Delay Adjustment")
+The speed at which the Ranger moves can be adjusted from Edit > Speed.<br>
+<img src="photos/timer_delay.png" alt="Speed Adjustment Window" width="50%"><br>
 The number inputted to the window represents the "timer delay" - that is the time (ms) between ticks of the simulation.
 
-Press start and watch Ranger Rick solve the maze!
-![Maze Solved](photos/completed.png "Completed Maze")
+Press start and watch Ranger Rick solve the maze!<br>
+<img src="photos/completed.png" alt="Maze Solved" width="50%"><br>
 
 Files
 -----
